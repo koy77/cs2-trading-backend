@@ -25,14 +25,26 @@ services:
     <<: *app
     ports:
       - "${APP_PORT:-8090}:8080"
+    # Базовый образ несёт HEALTHCHECK на admin-endpoint Caddy (:2019), который у нас выключен —
+    # поэтому проверяем по-настоящему: живой роут /up.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/up >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   worker:
     <<: *app
     command: ["php", "artisan", "queue:work", "rabbitmq", "--queue=orders.fulfill,webhooks.out,trades.poll,prices.refresh,inventory.sync", "--tries=5", "--timeout=120", "--sleep=1"]
+    healthcheck:
+      disable: true
 
   scheduler:
     <<: *app
     command: ["php", "artisan", "schedule:work", "--verbose"]
+    healthcheck:
+      disable: true
 
   mysql:
     image: mysql:8.4
