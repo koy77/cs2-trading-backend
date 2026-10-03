@@ -10,7 +10,7 @@ export
 .DEFAULT_GOAL := help
 
 .PHONY: help ensure-env install up down build fresh demo demo-open test test-race lint stan phpcs \
-	steam-sync race demo-webhook queue-fail queue-replay explain perf load-light report \
+	steam-sync race demo-webhook queue-fail queue-replay explain perf load-light report ledger-check \
 	monitoring-up monitoring-down logs shell artisan mysql
 
 help: ## помощь: список команд
@@ -76,6 +76,9 @@ load-light: ## лёгкий load-smoke по /api/state
 
 report: ## отчёт: аналитика + A/B комиссии
 	$(DC) exec app php artisan report:daily
+
+ledger-check: ## проверить сходимость двойной записи (ledger)
+	$(DC) exec app php artisan ledger:check
 
 monitoring-up: ## поднять Prometheus + Grafana (профиль monitoring)
 	$(DC) --profile monitoring up -d prometheus grafana
