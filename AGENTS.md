@@ -1,47 +1,15 @@
-<laravel-boost-guidelines>
-# Laravel Application
+# AGENTS.md — краткая версия для любых агентов (Codex, OpenCode, Cursor, Hermes…)
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+Полные правила и карта файлов: **[`CLAUDE.md`](CLAUDE.md)** (читай первым).
+Архитектура: `docs/architecture.md` · ТЗ: `spec.md` · журнал: `docs/progress.md`.
 
-## Prerequisites
+TL;DR:
 
-Verify that PHP and Composer are available:
-
-```sh
-php -v
-composer -V
-```
-
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
-
-macOS:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
-```
-
-Windows PowerShell:
-
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
-```
-
-Linux:
-
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
-```
-
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
-
-## Agent Setup
-
-Install Laravel Boost from the application root before making application changes:
-
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
-```
-
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+- Репо — демо CS2 trading backend (Laravel 13, MySQL, Redis, RabbitMQ, FrankenPHP, Docker).
+- **Все команды — через `make`** (см. `make help`); ничего не запускать на хосте напрямую.
+- После правок обязательны гейты: `make lint && make stan && make phpcs && make test`.
+- Не коммитить `.env` и любые секреты; env — только через `config/`, для тестов есть `cs2_test`.
+- Не ломать инварианты: один активный заказ на листинг, сходящийся ledger, идемпотентные вебхуки/синки.
+- Ключевые файлы: `app/Services/Trading/OrderService.php`, `app/Services/Psp/PspWebhookService.php`,
+  `app/Services/Steam/SteamGateway.php`, `packages/steam-sdk/`, `resources/views/panel.blade.php`.
+- Фичи: план в `docs/plans/` → TDD (RED→GREEN) → гейты → ветка/PR по шаблону.

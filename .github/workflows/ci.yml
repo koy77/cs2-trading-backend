@@ -74,7 +74,10 @@ jobs:
         run: ./vendor/bin/pint --test
 
       - name: Static analysis (PHPStan / Larastan)
-        run: ./vendor/bin/phpstan analyse --no-progress
+        run: ./vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+      - name: Code style (PHPCS PSR-12)
+        run: ./vendor/bin/phpcs --standard=phpcs.xml
 
       - name: Tests (PHPUnit)
         # Тесты идут против сервисов, поднятых выше (host-порты проброшены на 127.0.0.1).

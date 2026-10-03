@@ -1,34 +1,40 @@
-# progress.md — журнал сборки (в т.ч. для AI-агентов)
+# progress.md — журнал сборки
 
-Обновляется по ходу. **Текущий объём: v0.4 — ПОЛНЫЙ (M0–M4)**, по решению пользователя:
-всё вырезанное возвращается + FrankenPHP в classic-режиме + perf-тест на 100k (лёгкий, опциональный).
+**Статус: готово (M0–M4).** Демо поднимается одной командой `make demo`.
 
-## Решения (кратко)
-- **FrankenPHP classic mode** (`php_server`, без worker): правки PHP применяются сразу, без рестарта контейнера.
-- **mock-psp** — отдельный контейнер-сервис (эмулятор внешнего PSP, HMAC-колбэки, режимы ok/timeout/http_500).
-- **Фикстуры Steam** — слепки публичных профилей (Kyle 82 предмета, outsoseewhoya 11, crazy2 0);
-  режимы `real | fixture` переключаются в панели и в конфиге.
-- **Перф** (`make perf`): батч-сид PERF_ROWS=100000 в отдельную таблицу + EXPLAIN до/после индекса. Не в основном сценарии, ноут не страдает.
-- Стек: Laravel 13 (PHP 8.4), MySQL 8.4, Redis 7, RabbitMQ 4 (5 очередей + failed/DLQ-подход), Pennant (A/B), Prometheus+Grafana (профиль monitoring).
+## Что сделано
 
-## Статус
-- [x] Репо + Laravel 13 скелет (composer create-project)
-- [ ] M0 — инфраструктура: FrankenPHP-контейнер, compose, make, CI, статанализ, первый зелёный test
-- [ ] M1 — steam-sdk + Identity (OpenID/demo-вход) + Inventory (синк live/fixture) + панель (сцена 1)
-- [ ] M2 — Trading + Payments: листинги/заказы, atomic claim + лок, Idempotency-Key, mock-PSP, ledger, гонка, seed
-- [ ] M3 — Сделка (accept/decline/возвраты) + очереди (DLQ/replay) + доки + demo-script
-- [ ] M4 — A/B комиссии, аналитика, Grafana-дашборд, load-light, ai-review, perf-витрина
+- **M0 — инфраструктура.** Laravel 13 скелет, FrankenPHP classic (без NGINX/PHP-FPM), docker compose
+  (app/worker/scheduler/mysql/redis/rabbitmq/mock-psp/monitoring), Makefile, .env.example, PHPStan L8
+  (0 ошибок), Pint, PHPCS, PHPUnit; GitHub Actions (pint/phpstan/phpcs/tests + отдельный job SDK).
+- **M1 — Steam + Identity + Inventory.** Пакет `packages/steam-sdk` (OpenID, профиль, инвентарь, цены,
+  троттл-гейт); вход Steam OpenID + демо-входы; синк инвентаря через очередь (`real|fixture`);
+  фикстуры реальных публичных профилей; панель со статусами (mysql/redis/rabbit/psp/steam).
+- **M2 — Trading + Payments.** Листинги/заказы; 3 слоя защиты от гонок (atomic claim, unique-индекс,
+  транзакция+ledger); гонка ×30 одной кнопкой и в тестах; mock-PSP (ok/timeout/http_500);
+  HMAC-вебхуки + окно timestamp + дедуп; `Idempotency-Key`; двойная запись (`make ledger-check`).
+- **M3 — Сделка + очереди + доки.** TradeProvider/Fake (created→sent→accepted|declined|expired),
+  accept/decline/expire, возвраты, авто-протухание резервов; 5 очередей RabbitMQ с retry/backoff,
+  failed_jobs + replay, демо «отравить очередь»; README, spec.md, docs/*, demo-script.
+- **M4 — плюшки.** A/B комиссии (Pennant a=3%/b=4%) + `make report`; аналитика (events);
+  Prometheus `/metrics` + Grafana-дашборд (профиль monitoring); `make load-light` (p95/rps);
+  `make perf` (100k батч-сид + EXPLAIN до/после индекса); AI-воркфлоу (CLAUDE.md, slash-команды,
+  хук авто-Pint, .mcp.json, ai-review в CI).
 
-## Быстрые команды
-`make help` · `make up` · `make demo` (up + fresh + открыть панель) · `make test` · `make race` ·
-`make demo-webhook MODE=dup` · `make perf` · `make report`
+## Как проверено
 
-## Панель
-http://localhost:8090 — кнопки: вход (Steam/Demo), синк инвентаря (live/fixture), листинги, покупка,
-гонка ×50, пополнение, вебхуки, сделка, очереди, живой журнал событий.
+- `php artisan test` — **28 тестов, 136 ассертов, всё зелёное** (включая гонку и идемпотентность).
+- `pint --test` PASS (128 файлов) · `phpstan` L8 — **0 ошибок** · `phpcs` — **0 errors**.
+- Живые прогоны: панель, синк (live/fixture), гонка ×30 (1 победитель), dup-вебхуки ×10 (1 кредит),
+  mock-PSP сценарии, очереди (retry→failed→replay), `make report`, `make ledger-check`, `make perf`.
+
+## Хвосты / что дальше (не блокеры)
+
+- [ ] Опционально: скринкаст 3–5 мин по docs/demo-script.md.
+- [ ] Опционально: `gh repo create` и push (репо полностью локально-готов).
+- [ ] Roadmap на будущее: реальный `RealTradeProvider` (сессия Steam), кабинет админа, DLQ-очеловечивание.
 
 ## Внешние точки
-- RabbitMQ UI: http://localhost:15674 (cs2/secret)
-- Adminer (профиль tools): http://localhost:8097
-- Grafana (профиль monitoring): http://localhost:3001 (admin/admin)
-- mock-psp: http://localhost:8091/api/health
+
+- Keyless-проверки Steam и живой probe-лог: `~/research/cs2-trading-demo/` (вне репо).
+- Тестовое ТЗ у компании отсутствует — это свободная демка под вакансию (см. spec.md).
