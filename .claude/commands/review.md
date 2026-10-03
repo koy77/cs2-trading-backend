@@ -9,7 +9,7 @@ argument-hint: [ветка | PR | пусто — изменения против
 
 ## 1. Проверки (упавшая проверка — blocker, ревью «зелёным» быть не может)
 
-- Стиль (Pint): `./vendor/bin/pint --test` (не `make lint` — там режим `--dirty`, он правит файлы)
+- Стиль (Pint): `./vendor/bin/pint --test` (не `make lint` — он автоформатирует файлы)
 - PHPCS (PSR-12): `make phpcs` → `./vendor/bin/phpcs --standard=phpcs.xml`
 - Статанализ: `make stan` → `./vendor/bin/phpstan analyse --no-progress`
 - Тесты: `make test` → `php artisan test`

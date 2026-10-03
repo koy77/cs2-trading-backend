@@ -48,8 +48,8 @@ test: ## тесты Laravel (БД cs2_test)
 test-race: ## только concurrency-тесты (гонка за листинг)
 	$(DC) exec app php artisan test --filter=RaceTest
 
-lint: ## pint --dirty (формат изменённых)
-	$(DC) exec app ./vendor/bin/pint --dirty
+lint: ## pint (автоформат кода)
+	$(DC) exec app ./vendor/bin/pint
 stan: ## phpstan (larastan, level 8)
 	$(DC) exec app ./vendor/bin/phpstan analyse --no-progress --memory-limit=1G
 phpcs: ## PHPCS PSR-12

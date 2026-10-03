@@ -42,7 +42,7 @@ FrankenPHP in classic mode. Steam-интеграция **без API-ключей
 
 ## Хуки и MCP
 
-- `.claude/settings.json`: PostToolUse(Edit|Write) → `pint --dirty` (автоформат после правок).
+- `.claude/settings.json`: PostToolUse(Edit|Write) → `pint` (автоформат после правок; в контейнере нет git-бинарника, поэтому `--dirty` недоступен — форматируем весь код).
 - `.mcp.json`: `mysql-readonly` (только чтение, host-порт 33061) + `fetch` — для разведки данных/доков.
 - CI: `.github/workflows/ci.yml` (обязательные гейты), `ai-review.yml` (опциональный AI-ревью PR).
 

@@ -10,7 +10,7 @@
 | [`CLAUDE.md`](../CLAUDE.md) | «Операционка»: правила, карта файлов, инварианты, гейты. Читается агентом первым. |
 | [`AGENTS.md`](../AGENTS.md) | Краткая версия для любых агентов (Codex/OpenCode/Cursor/Hermes). |
 | [`.claude/commands/`](../.claude/commands) | Slash-команды: `/feature` (план→TDD), `/review` (гейты+чеклист), `/sync` (Steam). |
-| [`.claude/settings.json`](../.claude/settings.json) | Хук PostToolUse(Edit\|Write) → авто-`pint --dirty` после правок. |
+| [`.claude/settings.json`](../.claude/settings.json) | Хук PostToolUse(Edit\|Write) → авто-`pint` после правок. |
 | [`.mcp.json`](../.mcp.json) | MCP-серверы: `mysql-readonly` (read-only доступ к демо-БД) + `fetch`. |
 | [`docs/progress.md`](progress.md) | Журнал сборки: решения, статус, что осталось (агент обновляет). |
 | [`spec.md`](../spec.md) | Полное ТЗ (RU), включая Приложение D с ответами для интервью. |

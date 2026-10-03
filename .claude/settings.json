@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "docker compose exec -T app sh -lc './vendor/bin/pint --dirty || true'"
+            "command": "docker compose exec -T app sh -lc './vendor/bin/pint || true'"
           }
         ]
       }
