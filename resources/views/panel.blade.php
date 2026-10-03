@@ -81,6 +81,7 @@
             <button data-action="sync" data-mode="fixture">Синк: fixture</button>
             <span class="muted">очередь inventory.sync → воркер</span>
         </div>
+        <div class="muted" id="items-hint" style="margin-top:6px"></div>
         <div class="scroll" style="margin-top:8px"><table id="items"></table></div>
     </section>
 
@@ -236,15 +237,27 @@ function renderSteam(state) {
             <b>Fixture</b><span>${s.fixture_available ? '<span class="ok">есть</span>' : '<span class="warn">нет</span>'}</span>`;
     }
 
-    const rows = (state.inventory || []).map(i => `
+    const items = state.inventory || [];
+    const tradableCount = items.filter(i => i.tradable).length;
+    const statusRu = { in_inventory: 'в инвентаре', listed: 'в продаже', sold: 'продан' };
+    const rows = items.map(i => `
         <tr>
             <td title="${esc(i.market_hash_name)}">${esc(i.market_hash_name)}</td>
-            <td>${i.tradable ? '<span class="ok">✓</span>' : '<span class="muted">—</span>'}</td>
-            <td><span class="pill ${esc(i.status)}">${esc(i.status)}</span></td>
-            <td>${i.listable ? `<button class="small primary" data-action="list" data-id="${i.id}" data-hash="${esc(i.market_hash_name)}">Продать</button>` : ''}</td>
+            <td>${i.tradable ? '<span class="ok">✓</span>' : '<span class="muted" title="Steam запрещает передачу: трейд-холд (новые покупки/обмены) или непередаваемый тип предмета (значки, часть граффити, стоковые и т.п.)">—</span>'}</td>
+            <td><span class="pill ${esc(i.status)}">${esc(statusRu[i.status] || i.status)}</span></td>
+            <td>${i.listable
+                ? `<button class="small primary" data-action="list" data-id="${i.id}" data-hash="${esc(i.market_hash_name)}">Продать</button>`
+                : (i.tradable ? '' : '<span class="muted" style="font-size:10px" title="Steam не разрешает передачу этого предмета — продать его нельзя, пока/если ограничение не снимется">не tradable</span>')}</td>
         </tr>`);
     $('items').innerHTML = '<tr><th>Предмет</th><th>tradable</th><th>статус</th><th></th></tr>' +
         (rows.length ? rows.join('') : '<tr><td colspan="4" class="muted">инвентарь пуст — нажми «Синк»</td></tr>');
+
+    const ih = $('items-hint');
+    if (ih) {
+        ih.textContent = items.length
+            ? `к продаже доступно: ${tradableCount} из ${items.length} — кнопка «Продать» только у tradable-предметов; у остальных Steam запрещает передачу (трейд-холд или непередаваемый тип)`
+            : '';
+    }
 }
 
 function renderListings(state) {
