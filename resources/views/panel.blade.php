@@ -250,7 +250,9 @@ function renderSteam(state) {
                 : (i.tradable ? '' : '<span class="muted" style="font-size:10px" title="Steam не разрешает передачу этого предмета — продать его нельзя, пока/если ограничение не снимется">не tradable</span>')}</td>
         </tr>`);
     $('items').innerHTML = '<tr><th>Предмет</th><th>tradable</th><th>статус</th><th></th></tr>' +
-        (rows.length ? rows.join('') : '<tr><td colspan="4" class="muted">инвентарь пуст — нажми «Синк»</td></tr>');
+        (rows.length ? rows.join('') : `<tr><td colspan="4" class="muted">${state.user
+            ? 'предметов нет — у этого пользователя пустой публичный инвентарь Steam. Выставлять можно только свои tradable-предметы: войди как kyle или outso'
+            : 'войди как kyle/outso, чтобы увидеть Steam-инвентарь'}</td></tr>`);
 
     const ih = $('items-hint');
     if (ih) {
@@ -268,7 +270,9 @@ function renderListings(state) {
             <td><b>${money(l.price_cents)}</b></td>
             <td>${esc(l.seller)}</td>
             <td><span class="pill ${esc(l.status)}">${esc(l.status)}</span></td>
-            <td>${l.can_buy ? `<button class="small primary" data-action="buy" data-id="${l.id}">Купить</button>` : ''}</td>
+            <td>${l.can_buy
+                ? `<button class="small primary" data-action="buy" data-id="${l.id}">Купить</button>`
+                : (l.mine ? '<span class="muted" style="font-size:10px">ваш лот</span>' : '')}</td>
         </tr>`);
     $('listings').innerHTML = '<tr><th>#</th><th>Предмет</th><th>Цена</th><th>Продавец</th><th>Статус</th><th></th></tr>' +
         (rows.length ? rows.join('') : '<tr><td colspan="6" class="muted">нет активных листингов</td></tr>');
