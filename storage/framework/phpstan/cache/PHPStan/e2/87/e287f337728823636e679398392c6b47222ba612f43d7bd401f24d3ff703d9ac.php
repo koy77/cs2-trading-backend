@@ -2,7 +2,7 @@
 
 // odsl-/app/app/Jobs/PoisonJob.php-PHPStan\BetterReflection\Reflection\ReflectionClass-App\Jobs\PoisonJob
 return \PHPStan\Cache\CacheItem::__set_state(array(
-   'variableKey' => 'v2-6.73.0.5-8.4-9987a698a33aa7e86969a32da534e66249f69eaf41fb01cf6886dc5c60a56bd4',
+   'variableKey' => 'v2-6.73.0.5-8.4-25466de59b9fcc7d6e70838099a87c9f00e40ed74ef9f4adf949a7d9ec082458',
    'data' => 
   array (
     'locatedSource' => 
@@ -23,14 +23,17 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     'isBackedEnum' => false,
     'modifiers' => 0,
     'docComment' => '/**
- * Демонстрационное «отравленное» сообщение: всегда падает,
- * после retries уходит в failed_jobs (make queue-fail / make queue-replay).
+ * Демонстрационное «отравленное» сообщение.
+ *
+ * Первая доставка падает намеренно → задача уходит в failed_jobs.
+ * «Разобрать failed» (queue:retry all) доставляет её повторно — и она ПРОХОДИТ:
+ * полный цикл «упало → разобрали → переиграли» (в жизни так реплеят задачи после фикса бага).
  */',
     'attributes' => 
     array (
     ),
-    'startLine' => 12,
-    'endLine' => 27,
+    'startLine' => 16,
+    'endLine' => 42,
     'startColumn' => 1,
     'endColumn' => 1,
     'parentClassName' => NULL,
@@ -64,25 +67,68 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         ),
         'default' => 
         array (
-          'code' => '3',
+          'code' => '1',
           'attributes' => 
           array (
-            'startLine' => 16,
-            'endLine' => 16,
-            'startTokenPos' => 42,
-            'startFilePos' => 408,
-            'endTokenPos' => 42,
-            'endFilePos' => 408,
+            'startLine' => 20,
+            'endLine' => 20,
+            'startTokenPos' => 47,
+            'startFilePos' => 725,
+            'endTokenPos' => 47,
+            'endFilePos' => 725,
           ),
         ),
         'docComment' => NULL,
         'attributes' => 
         array (
         ),
-        'startLine' => 16,
-        'endLine' => 16,
+        'startLine' => 20,
+        'endLine' => 20,
         'startColumn' => 5,
         'endColumn' => 26,
+        'isPromoted' => false,
+        'declaredAtCompileTime' => true,
+        'immediateVirtual' => false,
+        'immediateHooks' => 
+        array (
+        ),
+      ),
+      'token' => 
+      array (
+        'declaringClassName' => 'App\\Jobs\\PoisonJob',
+        'implementingClassName' => 'App\\Jobs\\PoisonJob',
+        'name' => 'token',
+        'modifiers' => 1,
+        'type' => 
+        array (
+          'class' => 'PHPStan\\BetterReflection\\Reflection\\ReflectionNamedType',
+          'data' => 
+          array (
+            'name' => 'string',
+            'isIdentifier' => true,
+          ),
+        ),
+        'default' => 
+        array (
+          'code' => '\'\'',
+          'attributes' => 
+          array (
+            'startLine' => 23,
+            'endLine' => 23,
+            'startTokenPos' => 60,
+            'startFilePos' => 891,
+            'endTokenPos' => 60,
+            'endFilePos' => 892,
+          ),
+        ),
+        'docComment' => '/** Токен изолирует один «яд» от другого (флаг «уже падал» — на задачу). */',
+        'attributes' => 
+        array (
+        ),
+        'startLine' => 23,
+        'endLine' => 23,
+        'startColumn' => 5,
+        'endColumn' => 30,
         'isPromoted' => false,
         'declaredAtCompileTime' => true,
         'immediateVirtual' => false,
@@ -93,28 +139,58 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     'immediateMethods' => 
     array (
-      'backoff' => 
+      '__construct' => 
       array (
-        'name' => 'backoff',
+        'name' => '__construct',
         'parameters' => 
         array (
-        ),
-        'returnsReference' => false,
-        'returnType' => 
-        array (
-          'class' => 'PHPStan\\BetterReflection\\Reflection\\ReflectionNamedType',
-          'data' => 
+          'token' => 
           array (
-            'name' => 'int',
-            'isIdentifier' => true,
+            'name' => 'token',
+            'default' => 
+            array (
+              'code' => '\'\'',
+              'attributes' => 
+              array (
+                'startLine' => 25,
+                'endLine' => 25,
+                'startTokenPos' => 75,
+                'startFilePos' => 944,
+                'endTokenPos' => 75,
+                'endFilePos' => 945,
+              ),
+            ),
+            'type' => 
+            array (
+              'class' => 'PHPStan\\BetterReflection\\Reflection\\ReflectionNamedType',
+              'data' => 
+              array (
+                'name' => 'string',
+                'isIdentifier' => true,
+              ),
+            ),
+            'isVariadic' => false,
+            'byRef' => false,
+            'isPromoted' => false,
+            'attributes' => 
+            array (
+            ),
+            'startLine' => 25,
+            'endLine' => 25,
+            'startColumn' => 33,
+            'endColumn' => 50,
+            'parameterIndex' => 0,
+            'isOptional' => true,
           ),
         ),
+        'returnsReference' => false,
+        'returnType' => NULL,
         'attributes' => 
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 18,
-        'endLine' => 21,
+        'startLine' => 25,
+        'endLine' => 28,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -148,8 +224,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 23,
-        'endLine' => 26,
+        'startLine' => 30,
+        'endLine' => 41,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => true,

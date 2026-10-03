@@ -2,7 +2,7 @@
 
 // odsl-/app/app/Console/Commands/DemoQueueFail.php-PHPStan\BetterReflection\Reflection\ReflectionClass-App\Console\Commands\DemoQueueFail
 return \PHPStan\Cache\CacheItem::__set_state(array(
-   'variableKey' => 'v2-6.73.0.5-8.4-8584f92e4da634981d9584d531aa61b2c778e4f2474ac20e649563a2ad56946a',
+   'variableKey' => 'v2-6.73.0.5-8.4-f5bc684d21fe8f81684e1dc8a72e0e5a0a60a91d420f2dc6cc01be5819e037e6',
    'data' => 
   array (
     'locatedSource' => 
@@ -26,8 +26,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     'attributes' => 
     array (
     ),
-    'startLine' => 8,
-    'endLine' => 29,
+    'startLine' => 9,
+    'endLine' => 30,
     'startColumn' => 1,
     'endColumn' => 1,
     'parentClassName' => 'Illuminate\\Console\\Command',
@@ -54,20 +54,20 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
           'code' => '\'demo:queue-fail {--jobs=1 : сколько отравленных сообщений бросить}\'',
           'attributes' => 
           array (
-            'startLine' => 10,
-            'endLine' => 10,
-            'startTokenPos' => 33,
-            'startFilePos' => 162,
-            'endTokenPos' => 33,
-            'endFilePos' => 263,
+            'startLine' => 11,
+            'endLine' => 11,
+            'startTokenPos' => 38,
+            'startFilePos' => 190,
+            'endTokenPos' => 38,
+            'endFilePos' => 291,
           ),
         ),
         'docComment' => NULL,
         'attributes' => 
         array (
         ),
-        'startLine' => 10,
-        'endLine' => 10,
+        'startLine' => 11,
+        'endLine' => 11,
         'startColumn' => 5,
         'endColumn' => 130,
         'isPromoted' => false,
@@ -89,20 +89,20 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
           'code' => '\'Бросить «отравленные» сообщения в очередь (после ретраев уйдут в failed_jobs)\'',
           'attributes' => 
           array (
-            'startLine' => 12,
-            'endLine' => 12,
-            'startTokenPos' => 42,
-            'startFilePos' => 296,
-            'endTokenPos' => 42,
-            'endFilePos' => 429,
+            'startLine' => 13,
+            'endLine' => 13,
+            'startTokenPos' => 47,
+            'startFilePos' => 324,
+            'endTokenPos' => 47,
+            'endFilePos' => 457,
           ),
         ),
         'docComment' => NULL,
         'attributes' => 
         array (
         ),
-        'startLine' => 12,
-        'endLine' => 12,
+        'startLine' => 13,
+        'endLine' => 13,
         'startColumn' => 5,
         'endColumn' => 164,
         'isPromoted' => false,
@@ -135,8 +135,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 14,
-        'endLine' => 28,
+        'startLine' => 15,
+        'endLine' => 29,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,

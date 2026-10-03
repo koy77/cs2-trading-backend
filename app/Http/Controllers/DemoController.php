@@ -7,6 +7,7 @@ use App\Services\Psp\PspClient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 class DemoController extends Controller
 {
@@ -42,13 +43,13 @@ class DemoController extends Controller
         return response()->json(['output' => Artisan::output()]);
     }
 
-    /** Отравить очередь (ретраи → failed_jobs). */
+    /** Отравить очередь: первая доставка падает → failed_jobs («Разобрать failed» пройдёт успешно). */
     public function queuePoison(Request $request): JsonResponse
     {
         $jobs = min(10, max(1, (int) $request->input('jobs', 1)));
 
         for ($i = 0; $i < $jobs; $i++) {
-            PoisonJob::dispatch()->onQueue('orders.fulfill');
+            PoisonJob::dispatch((string) Str::uuid())->onQueue('orders.fulfill');
         }
 
         return response()->json(['queued' => $jobs]);

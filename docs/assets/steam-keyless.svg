@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="680" viewBox="0 0 1060 680" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" role="img" aria-label="Steam integration without API keys — what is called, what is wrapped, what is mocked">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#12203a" stroke-width="1"/>
+    </pattern>
+    <marker id="m-emerald" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#34d399"/></marker>
+    <marker id="m-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+
+  <rect width="1060" height="680" fill="#020617"/>
+  <rect width="1060" height="680" fill="url(#grid)"/>
+
+  <text x="36" y="52" font-size="24" font-weight="700" fill="#e2e8f0">Steam integration — zero API keys</text>
+  <text x="36" y="78" font-size="12.5" fill="#94a3b8">what the demo calls directly · what the SDK wraps · what is impossible without a session (and mocked honestly)</text>
+
+  <!-- inter-column arrows -->
+  <line x1="360" y1="290" x2="375" y2="290" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="680" y1="290" x2="695" y2="290" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+
+  <!-- ===== column A: used as-is, no key ===== -->
+  <rect x="36" y="100" width="322" height="380" rx="10" fill="#0f172a"/>
+  <rect x="36" y="100" width="322" height="380" rx="10" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="54" cy="123" r="4" fill="#34d399"/>
+  <text x="66" y="127" font-size="13" font-weight="700" fill="#34d399">USED AS-IS — NO KEY</text>
+
+  <rect x="48" y="144" width="298" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="167" font-size="12" font-weight="600" fill="#e2e8f0">OpenID 2.0 sign-in</text>
+  <text x="60" y="185" font-size="10" fill="#94a3b8">/openid/login · check_authentication</text>
+
+  <rect x="48" y="208" width="298" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="231" font-size="12" font-weight="600" fill="#e2e8f0">Public inventory feed</text>
+  <text x="60" y="249" font-size="10" fill="#94a3b8">/inventory/{steamid64}/730/2</text>
+
+  <rect x="48" y="272" width="298" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="295" font-size="12" font-weight="600" fill="#e2e8f0">Market price snapshot</text>
+  <text x="60" y="313" font-size="10" fill="#94a3b8">/market/priceoverview?appid=730</text>
+
+  <rect x="48" y="336" width="298" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="359" font-size="12" font-weight="600" fill="#e2e8f0">Vanity → SteamID64</text>
+  <text x="60" y="377" font-size="10" fill="#94a3b8">/id/{vanity}/?xml=1</text>
+
+  <rect x="48" y="400" width="298" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="423" font-size="12" font-weight="600" fill="#e2e8f0">Web API public read</text>
+  <text x="60" y="441" font-size="10" fill="#94a3b8">GetNumberOfCurrentPlayers · GetNewsForApp</text>
+
+  <!-- ===== column B: SDK boundary ===== -->
+  <rect x="378" y="100" width="300" height="380" rx="10" fill="#0f172a"/>
+  <rect x="378" y="100" width="300" height="380" rx="10" fill="rgba(8,51,68,0.40)" stroke="#22d3ee" stroke-width="1.5"/>
+  <circle cx="396" cy="123" r="4" fill="#22d3ee"/>
+  <text x="408" y="127" font-size="13" font-weight="700" fill="#22d3ee">koy77/steam-sdk package</text>
+
+  <rect x="390" y="144" width="276" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="402" y="167" font-size="12" font-weight="600" fill="#e2e8f0">Provider switch</text>
+  <text x="402" y="185" font-size="10" fill="#94a3b8">STEAM_PROVIDER = real | fixture</text>
+
+  <rect x="390" y="216" width="276" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="402" y="239" font-size="12" font-weight="600" fill="#e2e8f0">Shared throttle gate</text>
+  <text x="402" y="257" font-size="10" fill="#94a3b8">Redis ~1 rps across web + workers</text>
+
+  <rect x="390" y="288" width="276" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="402" y="311" font-size="12" font-weight="600" fill="#e2e8f0">Retries + backoff</text>
+  <text x="402" y="329" font-size="10" fill="#94a3b8">429/5xx · 1s→2s · honest UA + headers</text>
+
+  <rect x="390" y="360" width="276" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="402" y="383" font-size="12" font-weight="600" fill="#e2e8f0">Cache TTL + fallback</text>
+  <text x="402" y="401" font-size="10" fill="#94a3b8">prices 180 s · snapshot when Steam is down</text>
+
+  <!-- ===== column C: needs a key / impossible ===== -->
+  <rect x="698" y="100" width="326" height="380" rx="10" fill="#0f172a"/>
+  <rect x="698" y="100" width="326" height="380" rx="10" fill="rgba(136,19,55,0.40)" stroke="#fb7185" stroke-width="1.5"/>
+  <circle cx="716" cy="123" r="4" fill="#fb7185"/>
+  <text x="728" y="127" font-size="13" font-weight="700" fill="#fb7185">NEEDS A KEY / NO PUBLIC API</text>
+
+  <rect x="710" y="144" width="302" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="722" y="167" font-size="12" font-weight="600" fill="#fda4af">GetPlayerSummaries · IEconItems_730</text>
+  <text x="722" y="185" font-size="10" fill="#94a3b8">require a Web API key — deliberately not used here</text>
+
+  <rect x="710" y="216" width="302" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="722" y="239" font-size="12" font-weight="600" fill="#fda4af">ResolveVanityURL</text>
+  <text x="722" y="257" font-size="10" fill="#94a3b8">key required → we parse the community XML instead</text>
+
+  <rect x="710" y="288" width="302" height="96" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="722" y="311" font-size="12" font-weight="600" fill="#fda4af">Trade offers — sending / accepting</text>
+  <text x="722" y="329" font-size="10" fill="#94a3b8">no official API exists (account session + SteamGuard)</text>
+  <text x="722" y="347" font-size="10" fill="#94a3b8">→ FakeTradeProvider state machine:</text>
+  <text x="722" y="363" font-size="10" fill="#fda4af">created → sent → accepted | declined | expired</text>
+
+  <!-- ===== live OpenID flow ===== -->
+  <text x="36" y="516" font-size="12.5" font-weight="700" fill="#34d399">LIVE OPENID FLOW — the “Sign in through Steam” button</text>
+
+  <line x1="221" y1="560" x2="234" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
+  <line x1="422" y1="560" x2="435" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
+  <line x1="623" y1="560" x2="636" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
+  <line x1="824" y1="560" x2="837" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
+
+  <rect x="36" y="528" width="184" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="48" y="546" font-size="10" fill="#64748b">1</text>
+  <text x="48" y="564" font-size="11" font-weight="600" fill="#e2e8f0">Browser</text>
+  <text x="48" y="582" font-size="9.5" fill="#94a3b8">/auth/steam/redirect</text>
+
+  <rect x="237" y="528" width="184" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="249" y="546" font-size="10" fill="#64748b">2</text>
+  <text x="249" y="564" font-size="11" font-weight="600" fill="#e2e8f0">Steam OpenID</text>
+  <text x="249" y="582" font-size="9.5" fill="#94a3b8">checkid_setup</text>
+
+  <rect x="438" y="528" width="184" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="450" y="546" font-size="10" fill="#64748b">3</text>
+  <text x="450" y="564" font-size="11" font-weight="600" fill="#e2e8f0">User signs in</text>
+  <text x="450" y="582" font-size="9.5" fill="#94a3b8">steamcommunity.com</text>
+
+  <rect x="639" y="528" width="184" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="651" y="546" font-size="10" fill="#64748b">4</text>
+  <text x="651" y="564" font-size="11" font-weight="600" fill="#e2e8f0">Callback</text>
+  <text x="651" y="582" font-size="9.5" fill="#94a3b8">/auth/steam/callback</text>
+
+  <rect x="840" y="528" width="184" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="852" y="546" font-size="10" fill="#64748b">5</text>
+  <text x="852" y="564" font-size="11" font-weight="600" fill="#e2e8f0">Validate → session</text>
+  <text x="852" y="582" font-size="9.5" fill="#94a3b8">check_authentication</text>
+
+  <text x="36" y="636" font-size="10.5" fill="#64748b">CI and tests never touch the network — fixtures are committed snapshots of real public profiles; live calls are throttled (~1 rps) and cached.</text>
+</svg>

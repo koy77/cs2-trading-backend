@@ -10,7 +10,7 @@ export
 .DEFAULT_GOAL := help
 
 .PHONY: help ensure-env install up down build fresh demo demo-open test test-race lint stan phpcs \
-	steam-sync race demo-webhook queue-fail queue-replay explain perf load-light report ledger-check \
+	steam-sync race demo-webhook queue-fail queue-replay queue-flush explain perf load-light report ledger-check \
 	monitoring-up monitoring-down logs shell artisan mysql
 
 help: ## помощь: список команд
@@ -64,8 +64,12 @@ demo-webhook: ## вебхук PSP: MODE=valid|dup|bad_sig|stale
 	$(DC) exec app php artisan demo:webhook --mode=$${MODE:-valid}
 queue-fail: ## отравить очередь (ретраи → failed)
 	$(DC) exec app php artisan demo:queue-fail
-queue-replay: ## вернуть failed-задачи в работу
+queue-replay: ## вернуть failed-задачи в работу (демо-яд при повторе проходит успешно)
 	$(DC) exec app php artisan queue:retry all
+
+queue-flush: ## очистить failed_jobs + флаги демо-яда
+	$(DC) exec app php artisan queue:flush
+	$(DC) exec app sh -lc 'rm -f storage/framework/poison-once-*.flag'
 
 explain: ## EXPLAIN горячего запроса (лента листингов)
 	$(DC) exec app php artisan perf:explain

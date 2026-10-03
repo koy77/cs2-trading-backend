@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="300" viewBox="0 0 1060 300" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" role="img" aria-label="Ten-minute demo route: five scenes from Steam sync to quality gates">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#12203a" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1060" height="300" fill="#020617"/>
+  <rect width="1060" height="300" fill="url(#grid)"/>
+
+  <text x="36" y="50" font-size="24" font-weight="700" fill="#e2e8f0">10-minute demo route</text>
+  <text x="36" y="74" font-size="12.5" fill="#94a3b8">five scenes, every button real — clone this route for the interview (full script: docs/demo-script.md)</text>
+
+  <!-- card 1 -->
+  <rect x="36" y="100" width="184" height="150" rx="10" fill="#0f172a"/>
+  <rect x="36" y="100" width="184" height="150" rx="10" fill="rgba(8,51,68,0.40)" stroke="#22d3ee" stroke-width="1.5"/>
+  <circle cx="64" cy="128" r="13" fill="#0b1220" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="64" y="132.5" font-size="12" font-weight="700" fill="#22d3ee" text-anchor="middle">1</text>
+  <text x="86" y="133" font-size="12.5" font-weight="700" fill="#e2e8f0">Steam</text>
+  <text x="52" y="162" font-size="9.5" fill="#94a3b8">login: OpenID or demo</text>
+  <text x="52" y="178" font-size="9.5" fill="#94a3b8">inventory sync live|fixture</text>
+  <text x="52" y="194" font-size="9.5" fill="#94a3b8">market price (Redis cache)</text>
+  <text x="52" y="210" font-size="9.5" fill="#94a3b8">throttled · fixtures for CI</text>
+
+  <!-- card 2 -->
+  <rect x="237" y="100" width="184" height="150" rx="10" fill="#0f172a"/>
+  <rect x="237" y="100" width="184" height="150" rx="10" fill="rgba(136,19,55,0.40)" stroke="#fb7185" stroke-width="1.5"/>
+  <circle cx="265" cy="128" r="13" fill="#0b1220" stroke="#fb7185" stroke-width="1.5"/>
+  <text x="265" y="132.5" font-size="12" font-weight="700" fill="#fb7185" text-anchor="middle">2</text>
+  <text x="287" y="133" font-size="12.5" font-weight="700" fill="#e2e8f0">Race ×30</text>
+  <text x="253" y="162" font-size="9.5" fill="#94a3b8">30 processes, 1 listing</text>
+  <text x="253" y="178" font-size="9.5" fill="#94a3b8">1 winner · 29× 409</text>
+  <text x="253" y="194" font-size="9.5" fill="#94a3b8">ledger stays true</text>
+  <text x="253" y="210" font-size="9.5" fill="#94a3b8">make race / RaceTest</text>
+
+  <!-- card 3 -->
+  <rect x="438" y="100" width="184" height="150" rx="10" fill="#0f172a"/>
+  <rect x="438" y="100" width="184" height="150" rx="10" fill="rgba(120,53,15,0.30)" stroke="#fbbf24" stroke-width="1.5"/>
+  <circle cx="466" cy="128" r="13" fill="#0b1220" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="466" y="132.5" font-size="12" font-weight="700" fill="#fbbf24" text-anchor="middle">3</text>
+  <text x="488" y="133" font-size="12.5" font-weight="700" fill="#e2e8f0">Webhooks</text>
+  <text x="454" y="162" font-size="9.5" fill="#94a3b8">dup ×10 · bad_sig · stale</text>
+  <text x="454" y="178" font-size="9.5" fill="#94a3b8">one credit · 401s</text>
+  <text x="454" y="194" font-size="9.5" fill="#94a3b8">HMAC + ts window</text>
+  <text x="454" y="210" font-size="9.5" fill="#94a3b8">dedup by event_id</text>
+
+  <!-- card 4 -->
+  <rect x="639" y="100" width="184" height="150" rx="10" fill="#0f172a"/>
+  <rect x="639" y="100" width="184" height="150" rx="10" fill="rgba(251,146,60,0.30)" stroke="#fb923c" stroke-width="1.5"/>
+  <circle cx="667" cy="128" r="13" fill="#0b1220" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="667" y="132.5" font-size="12" font-weight="700" fill="#fb923c" text-anchor="middle">4</text>
+  <text x="689" y="133" font-size="12.5" font-weight="700" fill="#e2e8f0">Queues &amp; deal</text>
+  <text x="655" y="162" font-size="9.5" fill="#94a3b8">poison → retry → replay</text>
+  <text x="655" y="178" font-size="9.5" fill="#94a3b8">offer → accept / decline</text>
+  <text x="655" y="194" font-size="9.5" fill="#94a3b8">escrow settles or refunds</text>
+  <text x="655" y="210" font-size="9.5" fill="#94a3b8">5 queues · failed_jobs</text>
+
+  <!-- card 5 -->
+  <rect x="840" y="100" width="184" height="150" rx="10" fill="#0f172a"/>
+  <rect x="840" y="100" width="184" height="150" rx="10" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="868" cy="128" r="13" fill="#0b1220" stroke="#34d399" stroke-width="1.5"/>
+  <text x="868" y="132.5" font-size="12" font-weight="700" fill="#34d399" text-anchor="middle">5</text>
+  <text x="890" y="133" font-size="12.5" font-weight="700" fill="#e2e8f0">Proof</text>
+  <text x="856" y="162" font-size="9.5" fill="#94a3b8">make test · stan · phpcs</text>
+  <text x="856" y="178" font-size="9.5" fill="#94a3b8">28 tests green</text>
+  <text x="856" y="194" font-size="9.5" fill="#94a3b8">perf ×63 · p95 145 ms</text>
+  <text x="856" y="210" font-size="9.5" fill="#94a3b8">all gates in CI</text>
+
+  <text x="530" y="282" font-size="10.5" fill="#64748b" text-anchor="middle">Makefile: make demo · make race · make demo-webhook MODE=dup · make queue-fail · make perf · make report</text>
+</svg>

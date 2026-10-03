@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\PoisonJob;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class DemoQueueFail extends Command
 {
@@ -16,13 +17,13 @@ class DemoQueueFail extends Command
         $jobs = max(1, (int) $this->option('jobs'));
 
         for ($i = 0; $i < $jobs; $i++) {
-            PoisonJob::dispatch()->onQueue('orders.fulfill');
+            PoisonJob::dispatch((string) Str::uuid())->onQueue('orders.fulfill');
         }
 
         $this->info("Отправлено отравленных сообщений: {$jobs} (очередь orders.fulfill).");
-        $this->line('Воркер выполнит попытки и положит их в failed_jobs.');
+        $this->line('Первая доставка падает намеренно → задачи попадут в failed_jobs (счётчик в панели).');
         $this->line('Посмотреть: make artisan CMD="queue:failed"');
-        $this->line('Вернуть в работу: make queue-replay');
+        $this->line('Разобрать (повторная доставка пройдёт успешно): make queue-replay');
 
         return self::SUCCESS;
     }

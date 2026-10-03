@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="620" viewBox="0 0 1060 620" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" role="img" aria-label="CS2 Trading Backend demo — architecture overview">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#12203a" stroke-width="1"/>
+    </pattern>
+    <marker id="m-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#22d3ee"/></marker>
+    <marker id="m-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fbbf24"/></marker>
+    <marker id="m-rose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fb7185"/></marker>
+    <marker id="m-emerald" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#34d399"/></marker>
+    <marker id="m-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
+    <marker id="m-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+
+  <rect width="1060" height="620" fill="#020617"/>
+  <rect width="1060" height="620" fill="url(#grid)"/>
+
+  <text x="36" y="52" font-size="24" font-weight="700" fill="#e2e8f0">CS2 Trading Backend — demo</text>
+  <text x="36" y="78" font-size="12.5" fill="#94a3b8">Laravel 13 · FrankenPHP (classic) · MySQL 8.4 · Redis 7 · RabbitMQ 4 — keyless Steam, race-safe orders, all in Docker</text>
+
+  <!-- ===== arrows (drawn first: sit behind the cards) ===== -->
+  <line x1="292" y1="232" x2="324" y2="232" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#m-cyan)"/>
+  <text x="308" y="220" font-size="9.5" fill="#67e8f9" text-anchor="middle">keyless</text>
+  <text x="308" y="248" font-size="9.5" fill="#67e8f9" text-anchor="middle">HTTPS</text>
+
+  <line x1="692" y1="206" x2="754" y2="206" stroke="#fb7185" stroke-width="1.5" marker-end="url(#m-rose)"/>
+  <text x="723" y="196" font-size="9.5" fill="#fda4af" text-anchor="middle">charge</text>
+  <text x="723" y="222" font-size="9" fill="#9f5f6f" text-anchor="middle">s2s</text>
+
+  <line x1="754" y1="330" x2="694" y2="330" stroke="#fb7185" stroke-width="1.5" marker-end="url(#m-rose)"/>
+  <text x="723" y="320" font-size="9.5" fill="#fda4af" text-anchor="middle">webhook</text>
+  <text x="723" y="348" font-size="9" fill="#9f5f6f" text-anchor="middle">HMAC</text>
+
+  <line x1="510" y1="430" x2="510" y2="450" stroke="#334155" stroke-width="1.5"/>
+  <line x1="151" y1="450" x2="651" y2="450" stroke="#334155" stroke-width="1.5"/>
+  <line x1="151" y1="450" x2="151" y2="463" stroke="#334155" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="401" y1="450" x2="401" y2="463" stroke="#334155" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="651" y1="450" x2="651" y2="463" stroke="#334155" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <text x="401" y="444" font-size="9.5" fill="#64748b" text-anchor="middle">reads · writes · jobs</text>
+  <line x1="766" y1="506" x2="782" y2="506" stroke="#fb923c" stroke-width="1.5" marker-end="url(#m-orange)"/>
+
+  <!-- ===== STEAM card ===== -->
+  <rect x="36" y="100" width="252" height="330" rx="10" fill="#0f172a"/>
+  <rect x="36" y="100" width="252" height="330" rx="10" fill="rgba(120,53,15,0.30)" stroke="#fbbf24" stroke-width="1.5"/>
+  <circle cx="54" cy="123" r="4" fill="#fbbf24"/>
+  <text x="66" y="127" font-size="13" font-weight="700" fill="#fbbf24">STEAM — keyless</text>
+
+  <rect x="48" y="142" width="228" height="50" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="164" font-size="12" font-weight="600" fill="#e2e8f0">OpenID 2.0 sign-in</text>
+  <text x="60" y="181" font-size="10" fill="#94a3b8">/openid/login</text>
+
+  <rect x="48" y="200" width="228" height="50" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="222" font-size="12" font-weight="600" fill="#e2e8f0">Public inventory</text>
+  <text x="60" y="239" font-size="10" fill="#94a3b8">/inventory/{steamid}/730/2</text>
+
+  <rect x="48" y="258" width="228" height="50" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="280" font-size="12" font-weight="600" fill="#e2e8f0">Market price snapshot</text>
+  <text x="60" y="297" font-size="10" fill="#94a3b8">/market/priceoverview</text>
+
+  <rect x="48" y="316" width="228" height="50" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="60" y="338" font-size="12" font-weight="600" fill="#e2e8f0">Public Web API</text>
+  <text x="60" y="355" font-size="10" fill="#94a3b8">GetNumberOfCurrentPlayers</text>
+
+  <text x="48" y="398" font-size="10" fill="#64748b">throttled ~1 rps · retries · fixtures</text>
+  <text x="48" y="414" font-size="10" fill="#64748b">are committed for offline CI</text>
+
+  <!-- ===== APP card ===== -->
+  <rect x="330" y="100" width="360" height="330" rx="10" fill="#0f172a"/>
+  <rect x="330" y="100" width="360" height="330" rx="10" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="348" cy="123" r="4" fill="#34d399"/>
+  <text x="360" y="127" font-size="13" font-weight="700" fill="#34d399">Laravel 13 app · FrankenPHP (classic)</text>
+
+  <rect x="342" y="140" width="336" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="354" y="164" font-size="12" font-weight="600" fill="#e2e8f0">Panel + REST API — blade, no build step</text>
+  <text x="354" y="183" font-size="10" fill="#94a3b8">login: Steam OpenID / demo · /api/* · Idempotency-Key</text>
+
+  <rect x="342" y="214" width="336" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="354" y="238" font-size="12" font-weight="600" fill="#e2e8f0">Domain services — DI, thin controllers</text>
+  <text x="354" y="257" font-size="10" fill="#94a3b8">orders · ledger · webhooks · pricing · A/B fees</text>
+
+  <rect x="342" y="288" width="336" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="354" y="312" font-size="12" font-weight="600" fill="#e2e8f0">Events → Jobs on 5 RabbitMQ queues</text>
+  <text x="354" y="331" font-size="10" fill="#94a3b8">inventory.sync · orders.fulfill · webhooks.out</text>
+
+  <rect x="342" y="368" width="111" height="24" rx="12" fill="#0b1220" stroke="#2f4f47"/>
+  <text x="397" y="384" font-size="10" fill="#6ee7b7" text-anchor="middle">PHPStan L8 = 0</text>
+  <rect x="461" y="368" width="85" height="24" rx="12" fill="#0b1220" stroke="#2f4f47"/>
+  <text x="503" y="384" font-size="10" fill="#6ee7b7" text-anchor="middle">tests 28/28</text>
+  <rect x="554" y="368" width="92" height="24" rx="12" fill="#0b1220" stroke="#2f4f47"/>
+  <text x="600" y="384" font-size="10" fill="#6ee7b7" text-anchor="middle">Pint · PHPCS</text>
+
+  <!-- ===== PSP card ===== -->
+  <rect x="760" y="100" width="264" height="330" rx="10" fill="#0f172a"/>
+  <rect x="760" y="100" width="264" height="330" rx="10" fill="rgba(136,19,55,0.40)" stroke="#fb7185" stroke-width="1.5"/>
+  <circle cx="778" cy="123" r="4" fill="#fb7185"/>
+  <text x="790" y="127" font-size="13" font-weight="700" fill="#fb7185">mock-PSP — external provider</text>
+
+  <rect x="772" y="140" width="240" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="784" y="163" font-size="12" font-weight="600" fill="#e2e8f0">POST /api/charges</text>
+  <text x="784" y="181" font-size="10" fill="#94a3b8">server-to-server, synchronous</text>
+
+  <rect x="772" y="204" width="240" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="784" y="227" font-size="12" font-weight="600" fill="#e2e8f0">modes: ok · timeout · http_500</text>
+  <text x="784" y="245" font-size="10" fill="#94a3b8">testable failures on demand</text>
+
+  <rect x="772" y="268" width="240" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="784" y="291" font-size="12" font-weight="600" fill="#e2e8f0">HMAC callbacks + postbacks</text>
+  <text x="784" y="309" font-size="10" fill="#94a3b8">sha256 · ts window · replay-safe</text>
+
+  <rect x="772" y="332" width="240" height="44" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="784" y="358" font-size="11" font-weight="600" fill="#fda4af">charge → · ← webhook · dedup</text>
+
+  <!-- ===== data / runtime band ===== -->
+  <rect x="36" y="468" width="230" height="76" rx="8" fill="#0f172a"/>
+  <rect x="36" y="468" width="230" height="76" rx="8" fill="rgba(76,29,149,0.40)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="151" y="500" font-size="12" font-weight="700" fill="#c4b5fd" text-anchor="middle">MySQL 8.4</text>
+  <text x="151" y="520" font-size="10" fill="#94a3b8" text-anchor="middle">orders · ledger · EXPLAIN lab</text>
+
+  <rect x="286" y="468" width="230" height="76" rx="8" fill="#0f172a"/>
+  <rect x="286" y="468" width="230" height="76" rx="8" fill="rgba(76,29,149,0.40)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="401" y="500" font-size="12" font-weight="700" fill="#c4b5fd" text-anchor="middle">Redis 7</text>
+  <text x="401" y="520" font-size="10" fill="#94a3b8" text-anchor="middle">price cache · throttle gate</text>
+
+  <rect x="536" y="468" width="230" height="76" rx="8" fill="#0f172a"/>
+  <rect x="536" y="468" width="230" height="76" rx="8" fill="rgba(251,146,60,0.30)" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="651" y="500" font-size="12" font-weight="700" fill="#fdba74" text-anchor="middle">RabbitMQ 4</text>
+  <text x="651" y="520" font-size="10" fill="#94a3b8" text-anchor="middle">5 queues · retry · failed_jobs</text>
+
+  <rect x="786" y="468" width="238" height="76" rx="8" fill="#0f172a"/>
+  <rect x="786" y="468" width="238" height="76" rx="8" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <text x="905" y="500" font-size="12" font-weight="700" fill="#6ee7b7" text-anchor="middle">worker + scheduler</text>
+  <text x="905" y="520" font-size="10" fill="#94a3b8" text-anchor="middle">backoff retries · cron polls</text>
+
+  <!-- ===== measured chips ===== -->
+  <rect x="158" y="556" width="204" height="30" rx="15" fill="#0b1220" stroke="#34d399"/>
+  <text x="260" y="575" font-size="10.5" fill="#6ee7b7" text-anchor="middle">Race ×30 → 1 winner · 29× 409</text>
+  <rect x="378" y="556" width="196" height="30" rx="15" fill="#0b1220" stroke="#22d3ee"/>
+  <text x="476" y="575" font-size="10.5" fill="#67e8f9" text-anchor="middle">dup webhook ×10 → 1 credit</text>
+  <rect x="590" y="556" width="248" height="30" rx="15" fill="#0b1220" stroke="#a78bfa"/>
+  <text x="714" y="575" font-size="10.5" fill="#c4b5fd" text-anchor="middle">100k rows: 25.3 ms → 0.4 ms (×63)</text>
+</svg>

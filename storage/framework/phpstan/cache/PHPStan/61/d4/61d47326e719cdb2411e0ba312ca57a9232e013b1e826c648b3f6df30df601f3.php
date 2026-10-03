@@ -23,7 +23,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/app/app/Console/Commands/DemoQueueFail.php' => 
     array (
-      0 => '8584f92e4da634981d9584d531aa61b2c778e4f2474ac20e649563a2ad56946a',
+      0 => 'f5bc684d21fe8f81684e1dc8a72e0e5a0a60a91d420f2dc6cc01be5819e037e6',
       1 => 
       array (
         0 => 'app\\console\\commands\\demoqueuefail',
@@ -326,7 +326,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/app/app/Http/Controllers/DemoController.php' => 
     array (
-      0 => 'aa9a9094a72bfb42091691ef38476a6673c2662a206b971fcd14d90bdb2ac643',
+      0 => 'fd052b532d12649622640b16ea75d8f6ddee89ad3bbb3912bc0c28a1bd18600b',
       1 => 
       array (
         0 => 'app\\http\\controllers\\democontroller',
@@ -561,14 +561,14 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/app/app/Jobs/PoisonJob.php' => 
     array (
-      0 => '9987a698a33aa7e86969a32da534e66249f69eaf41fb01cf6886dc5c60a56bd4',
+      0 => '25466de59b9fcc7d6e70838099a87c9f00e40ed74ef9f4adf949a7d9ec082458',
       1 => 
       array (
         0 => 'app\\jobs\\poisonjob',
       ),
       2 => 
       array (
-        0 => 'app\\jobs\\backoff',
+        0 => 'app\\jobs\\__construct',
         1 => 'app\\jobs\\handle',
       ),
       3 => 

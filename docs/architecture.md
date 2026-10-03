@@ -75,7 +75,8 @@ mock-psp ── POST /webhooks/psp  (raw body, X-PSP-Signature: sha256=HMAC(body
 | `trades.poll` | trades:poll/scheduler → PollTradesJob | 2 |
 | `webhooks.out` | OrderFulfilled listener → SendPostbackJob | 5, backoff |
 
-Провал после ретраев → `failed_jobs` (`make queue-fail` / `make queue-replay` — демо, видно в UI).
+Демо-яд (`PoisonJob`) падает с первой доставки → `failed_jobs`; `make queue-replay` доставляет повторно — успешно.
+Реальные джобы ретраятся с backoff; провал после всех попыток → `failed_jobs` (видно в UI/панели).
 
 ## Инварианты (не ломать)
 

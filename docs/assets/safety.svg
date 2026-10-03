@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="560" viewBox="0 0 1060 560" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" role="img" aria-label="Invariants proven under concurrency: race winner, webhook replay, double-entry ledger">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#12203a" stroke-width="1"/>
+    </pattern>
+    <marker id="m-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+  </defs>
+
+  <rect width="1060" height="560" fill="#020617"/>
+  <rect width="1060" height="560" fill="url(#grid)"/>
+
+  <text x="36" y="52" font-size="24" font-weight="700" fill="#e2e8f0">Invariants under fire — proven, not promised</text>
+  <text x="36" y="78" font-size="12.5" fill="#94a3b8">three classic failure modes, reproduced live on the demo stack — numbers below are measured, not estimated</text>
+
+  <!-- ================= lane 1: race ================= -->
+  <rect x="36" y="100" width="988" height="118" rx="10" fill="#0f172a" stroke="#1e293b"/>
+  <text x="52" y="126" font-size="12.5" font-weight="700" fill="#22d3ee">1 · RACE — 30 parallel buys, one listing</text>
+
+  <line x1="272" y1="168" x2="288" y2="168" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="512" y1="168" x2="528" y2="168" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="752" y1="168" x2="768" y2="168" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+
+  <rect x="52" y="134" width="220" height="68" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="64" y="160" font-size="11.5" font-weight="700" fill="#e2e8f0">30 parallel processes</text>
+  <text x="64" y="178" font-size="9.5" fill="#94a3b8">make race · RaceTest</text>
+  <text x="64" y="194" font-size="9.5" fill="#94a3b8">separate OS processes, real DB</text>
+
+  <rect x="292" y="134" width="220" height="68" rx="6" fill="#0b1220" stroke="#22d3ee"/>
+  <text x="304" y="160" font-size="11.5" font-weight="700" fill="#67e8f9">Atomic claim</text>
+  <text x="304" y="178" font-size="9.5" fill="#94a3b8">UPDATE … WHERE status='active'</text>
+  <text x="304" y="194" font-size="9.5" fill="#94a3b8">affected rows must be 1</text>
+
+  <rect x="532" y="134" width="220" height="68" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="544" y="160" font-size="11.5" font-weight="700" fill="#e2e8f0">Unique index backstop</text>
+  <text x="544" y="178" font-size="9.5" fill="#94a3b8">orders.active_listing_id</text>
+  <text x="544" y="194" font-size="9.5" fill="#94a3b8">virtual column · MySQL 8.4</text>
+
+  <rect x="772" y="134" width="220" height="68" rx="6" fill="#0b1220" stroke="#34d399"/>
+  <text x="784" y="160" font-size="11.5" font-weight="700" fill="#6ee7b7">1 winner · 29× 409</text>
+  <text x="784" y="178" font-size="9.5" fill="#94a3b8">ledger delta = price exactly</text>
+  <text x="784" y="194" font-size="9.5" fill="#94a3b8">0 errors · 1.7 s</text>
+
+  <!-- ================= lane 2: replay ================= -->
+  <rect x="36" y="238" width="988" height="118" rx="10" fill="#0f172a" stroke="#1e293b"/>
+  <text x="52" y="264" font-size="12.5" font-weight="700" fill="#fb7185">2 · REPLAY — same webhook delivered ×10 (plus forgery attempts)</text>
+
+  <line x1="272" y1="306" x2="288" y2="306" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="512" y1="306" x2="528" y2="306" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="752" y1="306" x2="768" y2="306" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+
+  <rect x="52" y="272" width="220" height="68" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="64" y="298" font-size="11.5" font-weight="700" fill="#e2e8f0">PSP callback ×10</text>
+  <text x="64" y="316" font-size="9.5" fill="#94a3b8">same event_id, same body</text>
+  <text x="64" y="332" font-size="9.5" fill="#94a3b8">sent via mock-psp</text>
+
+  <rect x="292" y="272" width="220" height="68" rx="6" fill="#0b1220" stroke="#fb7185"/>
+  <text x="304" y="298" font-size="11.5" font-weight="700" fill="#fda4af">HMAC + ts window</text>
+  <text x="304" y="316" font-size="9.5" fill="#94a3b8">sha256 = hmac(raw body, secret)</text>
+  <text x="304" y="332" font-size="9.5" fill="#94a3b8">±300 s · hash_equals</text>
+
+  <rect x="532" y="272" width="220" height="68" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="544" y="298" font-size="11.5" font-weight="700" fill="#e2e8f0">Dedup insert</text>
+  <text x="544" y="316" font-size="9.5" fill="#94a3b8">UNIQUE(provider, event_id)</text>
+  <text x="544" y="332" font-size="9.5" fill="#94a3b8">replay → duplicate:true</text>
+
+  <rect x="772" y="272" width="220" height="68" rx="6" fill="#0b1220" stroke="#34d399"/>
+  <text x="784" y="298" font-size="11.5" font-weight="700" fill="#6ee7b7">1 credit · 9 duplicates</text>
+  <text x="784" y="316" font-size="9.5" fill="#94a3b8">401 on bad_sig / stale</text>
+  <text x="784" y="332" font-size="9.5" fill="#94a3b8">no double payout, ever</text>
+
+  <!-- ================= lane 3: money ================= -->
+  <rect x="36" y="376" width="988" height="118" rx="10" fill="#0f172a" stroke="#1e293b"/>
+  <text x="52" y="402" font-size="12.5" font-weight="700" fill="#a78bfa">3 · MONEY — every cent accounted (double-entry)</text>
+
+  <line x1="272" y1="444" x2="288" y2="444" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="512" y1="444" x2="528" y2="444" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <line x1="752" y1="444" x2="768" y2="444" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+
+  <rect x="52" y="410" width="220" height="68" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="64" y="436" font-size="11.5" font-weight="700" fill="#e2e8f0">Escrow on buy</text>
+  <text x="64" y="454" font-size="9.5" fill="#94a3b8">user −price → platform:escrow</text>
+  <text x="64" y="470" font-size="9.5" fill="#94a3b8">same DB transaction</text>
+
+  <rect x="292" y="410" width="220" height="68" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="304" y="436" font-size="11.5" font-weight="700" fill="#e2e8f0">Settle or refund</text>
+  <text x="304" y="454" font-size="9.5" fill="#94a3b8">accept → seller + fees</text>
+  <text x="304" y="470" font-size="9.5" fill="#94a3b8">decline/expire → buyer back</text>
+
+  <rect x="532" y="410" width="220" height="68" rx="6" fill="#0b1220" stroke="#a78bfa"/>
+  <text x="544" y="436" font-size="11.5" font-weight="700" fill="#c4b5fd">Double-entry groups</text>
+  <text x="544" y="454" font-size="9.5" fill="#94a3b8">each entry group sums to 0</text>
+  <text x="544" y="470" font-size="9.5" fill="#94a3b8">ledger_entries table</text>
+
+  <rect x="772" y="410" width="220" height="68" rx="6" fill="#0b1220" stroke="#34d399"/>
+  <text x="784" y="436" font-size="11.5" font-weight="700" fill="#6ee7b7">Balances match ✓</text>
+  <text x="784" y="454" font-size="9.5" fill="#94a3b8">escrow · fees · clearing</text>
+  <text x="784" y="470" font-size="9.5" fill="#94a3b8">make ledger-check</text>
+
+  <!-- ================= measured strip ================= -->
+  <rect x="89" y="516" width="222" height="32" rx="16" fill="#0b1220" stroke="#34d399"/>
+  <text x="200" y="536" font-size="10.5" fill="#6ee7b7" text-anchor="middle">Race ×30 → 1 winner / 29× 409</text>
+  <rect x="327" y="516" width="190" height="32" rx="16" fill="#0b1220" stroke="#22d3ee"/>
+  <text x="422" y="536" font-size="10.5" fill="#67e8f9" text-anchor="middle">dup webhook ×10 → 1 credit</text>
+  <rect x="533" y="516" width="242" height="32" rx="16" fill="#0b1220" stroke="#a78bfa"/>
+  <text x="654" y="536" font-size="10.5" fill="#c4b5fd" text-anchor="middle">100k rows: 25.3 ms → 0.4 ms (×63)</text>
+  <rect x="791" y="516" width="180" height="32" rx="16" fill="#0b1220" stroke="#fb923c"/>
+  <text x="881" y="536" font-size="10.5" fill="#fdba74" text-anchor="middle">load p95 145 ms · 225 rps</text>
+</svg>

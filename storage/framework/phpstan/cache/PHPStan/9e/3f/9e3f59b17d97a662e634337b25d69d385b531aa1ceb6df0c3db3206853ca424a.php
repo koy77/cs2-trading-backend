@@ -14,6 +14,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
           'shouldqueue' => 'Illuminate\\Contracts\\Queue\\ShouldQueue',
           'queueable' => 'Illuminate\\Foundation\\Queue\\Queueable',
+          'runtimeexception' => 'RuntimeException',
         ),
          'className' => 'App\\Jobs\\PoisonJob',
          'functionName' => NULL,
@@ -2160,16 +2161,17 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
           4 => NULL,
         ),
       )),
-      '0278c000ba669a4fd022dab3dd0df59d' => 
+      'af5c599df38b66d7bf613572e3fc0789' => 
       \PHPStan\Analyser\IntermediaryNameScope::__set_state(array(
          'namespace' => 'App\\Jobs',
          'uses' => 
         array (
           'shouldqueue' => 'Illuminate\\Contracts\\Queue\\ShouldQueue',
           'queueable' => 'Illuminate\\Foundation\\Queue\\Queueable',
+          'runtimeexception' => 'RuntimeException',
         ),
          'className' => 'App\\Jobs\\PoisonJob',
-         'functionName' => 'backoff',
+         'functionName' => '__construct',
          'templatePhpDocNodes' => 
         array (
         ),
@@ -2180,6 +2182,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
           array (
             'shouldqueue' => 'Illuminate\\Contracts\\Queue\\ShouldQueue',
             'queueable' => 'Illuminate\\Foundation\\Queue\\Queueable',
+            'runtimeexception' => 'RuntimeException',
           ),
            'className' => 'App\\Jobs\\PoisonJob',
            'functionName' => NULL,
@@ -2214,6 +2217,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
           'shouldqueue' => 'Illuminate\\Contracts\\Queue\\ShouldQueue',
           'queueable' => 'Illuminate\\Foundation\\Queue\\Queueable',
+          'runtimeexception' => 'RuntimeException',
         ),
          'className' => 'App\\Jobs\\PoisonJob',
          'functionName' => 'handle',
@@ -2227,6 +2231,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
           array (
             'shouldqueue' => 'Illuminate\\Contracts\\Queue\\ShouldQueue',
             'queueable' => 'Illuminate\\Foundation\\Queue\\Queueable',
+            'runtimeexception' => 'RuntimeException',
           ),
            'className' => 'App\\Jobs\\PoisonJob',
            'functionName' => NULL,
@@ -2257,7 +2262,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     1 => 
     array (
-      '/app/app/Jobs/PoisonJob.php' => '9987a698a33aa7e86969a32da534e66249f69eaf41fb01cf6886dc5c60a56bd4',
+      '/app/app/Jobs/PoisonJob.php' => '25466de59b9fcc7d6e70838099a87c9f00e40ed74ef9f4adf949a7d9ec082458',
       '/app/vendor/composer/../laravel/framework/src/Illuminate/Foundation/Queue/Queueable.php' => '3f02abd5d38d7cf07e64a46b9cc5e578004e5ff10401432f683ef354bc8f3419',
       '/app/vendor/composer/../laravel/framework/src/Illuminate/Foundation/Bus/Dispatchable.php' => '551294291775e57fbd590f0ed288a91cca683d42fac08e60c87e39b73617d47b',
       '/app/vendor/composer/../laravel/framework/src/Illuminate/Queue/InteractsWithQueue.php' => '315b11da66ac6485726ba7406ccafce8e8b633f9e6d9a09ed0eea239c6aeffee',

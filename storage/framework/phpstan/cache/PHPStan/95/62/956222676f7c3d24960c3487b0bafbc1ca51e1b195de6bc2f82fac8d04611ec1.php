@@ -2,7 +2,7 @@
 
 // odsl-/app/app/Http/Controllers/DemoController.php-PHPStan\BetterReflection\Reflection\ReflectionClass-App\Http\Controllers\DemoController
 return \PHPStan\Cache\CacheItem::__set_state(array(
-   'variableKey' => 'v2-6.73.0.5-8.4-aa9a9094a72bfb42091691ef38476a6673c2662a206b971fcd14d90bdb2ac643',
+   'variableKey' => 'v2-6.73.0.5-8.4-fd052b532d12649622640b16ea75d8f6ddee89ad3bbb3912bc0c28a1bd18600b',
    'data' => 
   array (
     'locatedSource' => 
@@ -26,8 +26,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     'attributes' => 
     array (
     ),
-    'startLine' => 11,
-    'endLine' => 76,
+    'startLine' => 12,
+    'endLine' => 77,
     'startColumn' => 1,
     'endColumn' => 1,
     'parentClassName' => 'App\\Http\\Controllers\\Controller',
@@ -69,8 +69,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 14,
-            'endLine' => 14,
+            'startLine' => 15,
+            'endLine' => 15,
             'startColumn' => 26,
             'endColumn' => 41,
             'parameterIndex' => 0,
@@ -91,8 +91,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => '/** Гонка: N параллельных покупок одного листинга (ровно один победитель). */',
-        'startLine' => 14,
-        'endLine' => 29,
+        'startLine' => 15,
+        'endLine' => 30,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -130,8 +130,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 32,
-            'endLine' => 32,
+            'startLine' => 33,
+            'endLine' => 33,
             'startColumn' => 29,
             'endColumn' => 44,
             'parameterIndex' => 0,
@@ -152,8 +152,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => '/** Вебхуки: valid | dup (×10) | bad_sig | stale. */',
-        'startLine' => 32,
-        'endLine' => 43,
+        'startLine' => 33,
+        'endLine' => 44,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -191,8 +191,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 46,
-            'endLine' => 46,
+            'startLine' => 47,
+            'endLine' => 47,
             'startColumn' => 33,
             'endColumn' => 48,
             'parameterIndex' => 0,
@@ -212,9 +212,9 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         'attributes' => 
         array (
         ),
-        'docComment' => '/** Отравить очередь (ретраи → failed_jobs). */',
-        'startLine' => 46,
-        'endLine' => 55,
+        'docComment' => '/** Отравить очередь: первая доставка падает → failed_jobs («Разобрать failed» пройдёт успешно). */',
+        'startLine' => 47,
+        'endLine' => 56,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -248,8 +248,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => '/** Вернуть failed-задачи в работу. */',
-        'startLine' => 58,
-        'endLine' => 63,
+        'startLine' => 59,
+        'endLine' => 64,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -287,8 +287,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 66,
-            'endLine' => 66,
+            'startLine' => 67,
+            'endLine' => 67,
             'startColumn' => 29,
             'endColumn' => 44,
             'parameterIndex' => 0,
@@ -313,8 +313,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 66,
-            'endLine' => 66,
+            'startLine' => 67,
+            'endLine' => 67,
             'startColumn' => 47,
             'endColumn' => 60,
             'parameterIndex' => 1,
@@ -335,8 +335,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => '/** Переключить режим mock-PSP: ok | timeout | http_500. */',
-        'startLine' => 66,
-        'endLine' => 75,
+        'startLine' => 67,
+        'endLine' => 76,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,

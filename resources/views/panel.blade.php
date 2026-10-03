@@ -49,6 +49,8 @@
         .kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 12px; }
         .kv b { color: var(--muted); font-weight: normal; }
         .scroll { max-height: 260px; overflow: auto; }
+        .hint { margin-top: 8px; padding: 8px 10px; border: 1px dashed #3a465c; border-radius: 6px; color: #aab4c5; font-size: 11.5px; line-height: 1.55; background: #121722; }
+        .hint b { color: #e6e9ef; }
         details { margin-top: 6px; }
         summary { cursor: pointer; color: var(--muted); font-size: 11px; }
     </style>
@@ -93,10 +95,7 @@
     <section>
         <h2>🤝 Мои сделки</h2>
         <div class="scroll"><table id="orders"></table></div>
-        <details>
-            <summary>подсказка: сценарий сделки</summary>
-            покупатель жмёт «Купить» → оффер создан (fake, очередь orders.fulfill) → продавец жмёт «Принять/Отклонить/Протух» → деньги из escrow уходят продавцу (или возвращаются покупателю).
-        </details>
+        <div class="hint" id="orders-hint">Сделка: покупатель жмёт «Купить» → деньги в escrow, листинг = reserved → переключись на продавца (kyle/outso, кнопки входа сверху) и нажми «Принять» → деньги продавцу, предмет = sold. «Отклонить/Протух» — возврат покупателю.</div>
     </section>
 
     <section>
@@ -124,7 +123,7 @@
             <button data-action="poison" data-jobs="5">Отравить ×5</button>
             <button data-action="replay">Разобрать failed</button>
         </div>
-        <div class="muted" style="margin-top:6px">яд → ретраи с backoff → failed_jobs; «Разобрать» вернёт в работу</div>
+        <div class="muted" style="margin-top:6px">яд: первая доставка падает → failed_jobs; «Разобрать» доставит повторно — и она пройдёт ✓</div>
     </section>
 
     <section>
@@ -288,6 +287,19 @@ function renderOrders(state) {
     }
     $('orders').innerHTML = '<tr><th>Заказ</th><th>Предмет</th><th>Сумма</th><th>Статус</th><th></th></tr>' +
         (rows.length ? rows.join('') : '<tr><td colspan="5" class="muted">сделок ещё нет</td></tr>');
+
+    const hint = $('orders-hint');
+    if (hint) {
+        const waiting = (state.orders?.sales || []).filter(o => o.status === 'paid');
+        const mine = (state.orders?.purchases || []).filter(o => o.status === 'paid');
+        if (waiting.length) {
+            hint.innerHTML = '▶ Сделки ждут решения: нажми <b>«Принять»</b> (деньги продавцу, предмет sold) или <b>«Отклонить/Протух»</b> (возврат покупателю).';
+        } else if (mine.length) {
+            hint.innerHTML = '▶ Покупка оплачена, деньги лежат в escrow (листинг «reserved»). Переключись на продавца <b>' + esc(mine[0].seller) + '</b> (кнопки входа сверху) и нажми <b>«Принять»</b>.';
+        } else {
+            hint.innerHTML = 'Сделка: покупатель «Купить» → деньги в escrow (reserved) → продавец «Принять» → sold. Входы: kyle / outso / buyer — сверху.';
+        }
+    }
 }
 
 function renderQueues(state) {
@@ -367,7 +379,7 @@ document.addEventListener('click', async (ev) => {
             const idem = crypto.randomUUID();
             const { status, data } = await api('/api/orders', 'POST', { listing_id: Number(btn.dataset.id) }, { 'Idempotency-Key': idem });
             out(`HTTP ${status}: ` + JSON.stringify(data), status < 400 ? 'ok' : 'err');
-            if (status < 400) out('оффер создаётся воркером (orders.fulfill) — статус у продавца', 'muted');
+            if (status < 400) out('деньги в escrow, листинг = reserved. Переключись на продавца и нажми «Принять» в «Моих сделках».', 'ok');
         });
         return;
     }
