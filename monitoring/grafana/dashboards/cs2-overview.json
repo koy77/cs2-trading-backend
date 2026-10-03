@@ -1,0 +1,60 @@
+{
+  "uid": "cs2-overview",
+  "title": "CS2 Trading — Overview",
+  "tags": ["cs2", "demo"],
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 39,
+  "refresh": "10s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Orders by status",
+      "gridPos": { "h": 5, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        { "refId": "A", "expr": "cs2_orders_total", "legendFormat": "{{status}}" }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "GMV / Fees (fulfilled)",
+      "gridPos": { "h": 5, "w": 8, "x": 8, "y": 0 },
+      "targets": [
+        { "refId": "A", "expr": "cs2_gmv_cents_total / 100", "legendFormat": "GMV $" },
+        { "refId": "B", "expr": "cs2_fees_cents_total / 100", "legendFormat": "Fees $" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Marketplace",
+      "gridPos": { "h": 5, "w": 8, "x": 16, "y": 0 },
+      "targets": [
+        { "refId": "A", "expr": "cs2_listings_active", "legendFormat": "listings" },
+        { "refId": "B", "expr": "cs2_inventory_items_total", "legendFormat": "items" },
+        { "refId": "C", "expr": "cs2_users_total", "legendFormat": "users" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Queue depth (messages)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 5 },
+      "targets": [
+        { "refId": "A", "expr": "cs2_queue_messages", "legendFormat": "{{queue}}" }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Orders by status (rate)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 5 },
+      "targets": [
+        { "refId": "A", "expr": "cs2_orders_total", "legendFormat": "{{status}}" }
+      ]
+    }
+  ]
+}
