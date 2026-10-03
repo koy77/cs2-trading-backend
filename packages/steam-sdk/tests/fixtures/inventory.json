@@ -1,0 +1,67 @@
+{
+    "assets": [
+        {
+            "appid": 730,
+            "contextid": "2",
+            "assetid": "210001",
+            "classid": "310001",
+            "instanceid": "0",
+            "amount": "1"
+        },
+        {
+            "appid": 730,
+            "contextid": "2",
+            "assetid": "210002",
+            "classid": "310002",
+            "instanceid": "0",
+            "amount": "1"
+        },
+        {
+            "appid": 730,
+            "contextid": "2",
+            "assetid": "210003",
+            "classid": "310001",
+            "instanceid": "1",
+            "amount": "1"
+        }
+    ],
+    "descriptions": [
+        {
+            "appid": 730,
+            "classid": "310001",
+            "instanceid": "0",
+            "market_hash_name": "AWP | Asiimov (Field-Tested)",
+            "name": "AWP | Asiimov",
+            "type": "Sniper Rifle",
+            "icon_url": "abc123",
+            "tradable": 1,
+            "marketable": 1
+        },
+        {
+            "appid": 730,
+            "classid": "310002",
+            "instanceid": "0",
+            "market_hash_name": "Sticker | Titan (Holo)",
+            "name": "Sticker | Titan",
+            "type": "Sticker",
+            "icon_url": "def456",
+            "tradable": 0,
+            "marketable": 0
+        },
+        {
+            "appid": 730,
+            "classid": "310001",
+            "instanceid": "1",
+            "market_hash_name": "StatTrak AWP | Asiimov (Field-Tested)",
+            "name": "AWP | Asiimov",
+            "type": "Sniper Rifle",
+            "icon_url": "ghi789",
+            "tradable": 1,
+            "marketable": 0
+        }
+    ],
+    "total_inventory_count": 3,
+    "success": 1,
+    "rwgrsn": -2,
+    "more_items": 0
+}

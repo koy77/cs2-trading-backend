@@ -1,0 +1,34 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "koy77/steam-sdk",
+    "version": "0.1.0",
+    "description": "Keyless Steam integration SDK: throttled HTTP client, OpenID, profiles, inventory, market prices and the public Web API.",
+    "type": "library",
+    "keywords": ["steam", "cs2", "inventory", "openid", "market"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "guzzlehttp/guzzle": "^7.9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SteamSdk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SteamSdk\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
