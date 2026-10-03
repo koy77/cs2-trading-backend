@@ -125,6 +125,10 @@ class RateLimitedHttpClient
     }
 
     /**
+     * Минимальный набор заголовков — проверено на живом Steam:
+     * с `Accept-Language` endpoint `market/priceoverview` отвечает 429 (антибот-эвристика),
+     * без него (UA + Referer) — стабильно 200. Не «улучшать» без перепроверки.
+     *
      * @return array<string, string>
      */
     public static function defaultHeaders(): array
@@ -132,7 +136,6 @@ class RateLimitedHttpClient
         return [
             'User-Agent' => self::DEFAULT_USER_AGENT,
             'Referer' => 'https://steamcommunity.com/',
-            'Accept-Language' => 'en-US,en;q=0.9',
             'Accept' => '*/*',
         ];
     }

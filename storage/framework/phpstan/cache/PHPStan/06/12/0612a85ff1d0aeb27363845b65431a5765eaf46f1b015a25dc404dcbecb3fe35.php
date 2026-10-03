@@ -2,7 +2,7 @@
 
 // odsl-/app/packages/steam-sdk/src/Support/RateLimitedHttpClient.php-PHPStan\BetterReflection\Reflection\ReflectionClass-SteamSdk\Support\RateLimitedHttpClient
 return \PHPStan\Cache\CacheItem::__set_state(array(
-   'variableKey' => 'v2-6.73.0.5-8.4-934b064269f3899711a9c01cf48a2ead379c43aef845c75aace8777b018745ef',
+   'variableKey' => 'v2-6.73.0.5-8.4-4fbb65c8678355b3c7c2dae1c2227a2079f42ef422c84f49cf4ef9c54d80e143',
    'data' => 
   array (
     'locatedSource' => 
@@ -38,7 +38,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     array (
     ),
     'startLine' => 27,
-    'endLine' => 233,
+    'endLine' => 236,
     'startColumn' => 1,
     'endColumn' => 1,
     'parentClassName' => NULL,
@@ -876,10 +876,14 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => '/**
+ * Минимальный набор заголовков — проверено на живом Steam:
+ * с `Accept-Language` endpoint `market/priceoverview` отвечает 429 (антибот-эвристика),
+ * без него (UA + Referer) — стабильно 200. Не «улучшать» без перепроверки.
+ *
  * @return array<string, string>
  */',
-        'startLine' => 130,
-        'endLine' => 138,
+        'startLine' => 134,
+        'endLine' => 141,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -917,8 +921,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 145,
-            'endLine' => 145,
+            'startLine' => 148,
+            'endLine' => 148,
             'startColumn' => 27,
             'endColumn' => 40,
             'parameterIndex' => 0,
@@ -943,8 +947,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 145,
-            'endLine' => 145,
+            'startLine' => 148,
+            'endLine' => 148,
             'startColumn' => 43,
             'endColumn' => 53,
             'parameterIndex' => 1,
@@ -958,12 +962,12 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
               'code' => '[]',
               'attributes' => 
               array (
-                'startLine' => 145,
-                'endLine' => 145,
-                'startTokenPos' => 700,
-                'startFilePos' => 4262,
-                'endTokenPos' => 701,
-                'endFilePos' => 4263,
+                'startLine' => 148,
+                'endLine' => 148,
+                'startTokenPos' => 693,
+                'startFilePos' => 4569,
+                'endTokenPos' => 694,
+                'endFilePos' => 4570,
               ),
             ),
             'type' => 
@@ -981,8 +985,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 145,
-            'endLine' => 145,
+            'startLine' => 148,
+            'endLine' => 148,
             'startColumn' => 56,
             'endColumn' => 74,
             'parameterIndex' => 2,
@@ -1007,8 +1011,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
  *
  * @throws SteamRequestException
  */',
-        'startLine' => 145,
-        'endLine' => 191,
+        'startLine' => 148,
+        'endLine' => 194,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => true,
@@ -1042,8 +1046,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 193,
-        'endLine' => 208,
+        'startLine' => 196,
+        'endLine' => 211,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -1081,8 +1085,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 210,
-            'endLine' => 210,
+            'startLine' => 213,
+            'endLine' => 213,
             'startColumn' => 39,
             'endColumn' => 54,
             'parameterIndex' => 0,
@@ -1103,8 +1107,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 210,
-        'endLine' => 215,
+        'startLine' => 213,
+        'endLine' => 218,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -1138,8 +1142,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 217,
-        'endLine' => 220,
+        'startLine' => 220,
+        'endLine' => 223,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -1173,8 +1177,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 222,
-        'endLine' => 225,
+        'startLine' => 225,
+        'endLine' => 228,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -1212,8 +1216,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 227,
-            'endLine' => 227,
+            'startLine' => 230,
+            'endLine' => 230,
             'startColumn' => 30,
             'endColumn' => 43,
             'parameterIndex' => 0,
@@ -1234,8 +1238,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 227,
-        'endLine' => 232,
+        'startLine' => 230,
+        'endLine' => 235,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,

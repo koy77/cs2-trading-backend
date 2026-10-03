@@ -381,8 +381,8 @@ document.addEventListener('click', async (ev) => {
             const hash = btn.dataset.hash;
             const p = await api('/api/price?hash=' + encodeURIComponent(hash));
             const suggest = p.data?.lowest_cents ? p.data.lowest_cents / 100 : 1;
-            out(`рыночная цена (${p.data?.source}): ${p.data?.lowest ?? '—'}`);
-            const input = prompt(`Цена в $ для:\n${hash}`, suggest.toFixed(2));
+            out(`рыночная цена Steam (${p.data?.source}): ${p.data?.lowest ?? '—'} — можешь поставить свою`);
+            const input = prompt(`Цена в $ для:\n${hash}\n(подсказка — рыночная: $${suggest.toFixed(2)})`, suggest.toFixed(2));
             if (input === null) { out('отменено'); return; }
             const cents = Math.round(parseFloat(String(input).replace(',', '.')) * 100);
             const { status, data } = await api('/api/listings', 'POST', { inventory_item_id: Number(btn.dataset.id), price_cents: cents });

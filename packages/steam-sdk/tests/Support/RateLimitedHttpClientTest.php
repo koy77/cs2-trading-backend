@@ -172,7 +172,8 @@ final class RateLimitedHttpClientTest extends TestCase
         self::assertStringContainsString('Mozilla/5.0', $request->getHeaderLine('User-Agent'));
         self::assertStringContainsString('Chrome/', $request->getHeaderLine('User-Agent'));
         self::assertSame('https://steamcommunity.com/', $request->getHeaderLine('Referer'));
-        self::assertSame('en-US,en;q=0.9', $request->getHeaderLine('Accept-Language'));
+        // Регресс-защита: с Accept-Language живой Steam отвечает 429 (см. defaultHeaders()).
+        self::assertSame('', $request->getHeaderLine('Accept-Language'));
     }
 
     public function test_post_form_sends_an_urlencoded_body(): void

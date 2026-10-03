@@ -185,7 +185,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/app/packages/steam-sdk/src/Support/RateLimitedHttpClient.php' => 
     array (
-      0 => '934b064269f3899711a9c01cf48a2ead379c43aef845c75aace8777b018745ef',
+      0 => '4fbb65c8678355b3c7c2dae1c2227a2079f42ef422c84f49cf4ef9c54d80e143',
       1 => 
       array (
         0 => 'steamsdk\\support\\ratelimitedhttpclient',

@@ -47,6 +47,9 @@
   Поймано по «странным» прогонам; фикс — жёсткая фиксация окружения в `tests/TestCase.php` (см. комментарий).
 - **MySQL init-скрипт утёк `set -u`** в entrypoint контейнера (сайд-эффект `sourcing`) — контейнер
   падал после создания баз. Фикс — никаких shell-опций в init-скриптах.
+- **Steam 429 из-за одного заголовка**: `market/priceoverview` отвечал 429, пока SDK слал
+  `Accept-Language`; без него (UA + Referer) — стабильно 200. Урок: минимизировать заголовки
+  и проверять поведение «как ходит рабочий curl», а не «как выглядит браузерно».
 - **PHPStan/Larastan до нуля**: типизация relations (`@return BelongsTo<User, $this>`), `@property`
   для дат, `DB::table` вместо `selectRaw` по моделям, config вместо env вне config/. Дисциплина
   «L8 без baseline» — намеренная.
