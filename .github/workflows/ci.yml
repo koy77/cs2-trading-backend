@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Обязательные гейты: стиль (Pint), статанализ (PHPStan/Larastan), тесты.
+  quality:
+    name: Quality (lint, stan, tests)
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          # cs2/secret — юзер из .env.example; entrypoint выдаёт ему права на cs2_test.
+          MYSQL_DATABASE: cs2_test
+          MYSQL_USER: cs2
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+      rabbitmq:
+        image: rabbitmq:4-management
+        ports:
+          - 5672:5672
+          - 15672:15672
+        options: >-
+          --health-cmd="rabbitmq-diagnostics -q ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, intl, zip, pcntl, sockets, bcmath
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Prepare env
+        run: |
+          cp .env.example .env
+          php artisan key:generate --ansi
+          php artisan config:clear
+
+      - name: Code style (Pint)
+        run: ./vendor/bin/pint --test
+
+      - name: Static analysis (PHPStan / Larastan)
+        run: ./vendor/bin/phpstan analyse --no-progress
+
+      - name: Tests (PHPUnit)
+        # Тесты идут против сервисов, поднятых выше (host-порты проброшены на 127.0.0.1).
+        env:
+          DB_HOST: 127.0.0.1
+          REDIS_HOST: 127.0.0.1
+          RABBITMQ_HOST: 127.0.0.1
+          CACHE_STORE: redis
+          QUEUE_CONNECTION: sync
+        run: php artisan test
+
+  # Внутренний пакет steam-sdk: свои зависимости и свои тесты (path-repo в корневом composer.json).
+  sdk-package:
+    name: steam-sdk (package)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Install Composer dependencies
+        working-directory: packages/steam-sdk
+        run: composer install --no-interaction --prefer-dist
+
+      - name: PHPUnit
+        working-directory: packages/steam-sdk
+        run: vendor/bin/phpunit

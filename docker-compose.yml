@@ -1,0 +1,115 @@
+name: cs2-trading
+
+x-app: &app
+  build: .
+  image: cs2-trading-app
+  working_dir: /app
+  user: "1000:1000"
+  env_file: [.env]
+  environment:
+    XDG_CONFIG_HOME: /tmp/caddy/config
+    XDG_DATA_HOME: /tmp/caddy/data
+  volumes:
+    - ./:/app
+  restart: unless-stopped
+  depends_on:
+    mysql:
+      condition: service_healthy
+    redis:
+      condition: service_started
+    rabbitmq:
+      condition: service_started
+
+services:
+  app:
+    <<: *app
+    ports:
+      - "${APP_PORT:-8090}:8080"
+
+  worker:
+    <<: *app
+    command: ["php", "artisan", "queue:work", "rabbitmq", "--queue=orders.fulfill,webhooks.out,trades.poll,prices.refresh,inventory.sync", "--tries=5", "--timeout=120", "--sleep=1"]
+
+  scheduler:
+    <<: *app
+    command: ["php", "artisan", "schedule:work", "--verbose"]
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-cs2}
+      MYSQL_USER: ${DB_USERNAME:-cs2}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+    ports:
+      - "${MYSQL_HOST_PORT:-33061}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./services/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis-data:/data
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-cs2}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-secret}
+    ports:
+      - "${RABBITMQ_UI_PORT:-15674}:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  mock-psp:
+    build: ./services/mock-psp
+    image: cs2-mock-psp
+    environment:
+      PSP_WEBHOOK_SECRET: ${PSP_WEBHOOK_SECRET:-dev-secret}
+    ports:
+      - "${MOCK_PSP_PORT:-8091}:8081"
+
+  adminer:
+    image: adminer:latest
+    profiles: [tools]
+    ports:
+      - "${ADMINER_PORT:-8097}:8080"
+
+  prometheus:
+    image: prom/prometheus:latest
+    profiles: [monitoring]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "${PROMETHEUS_PORT:-9091}:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    profiles: [monitoring]
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+
+volumes:
+  mysql-data:
+  redis-data:
+  rabbitmq-data:
+  grafana-data:

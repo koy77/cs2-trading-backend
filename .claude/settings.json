@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "docker compose exec -T app sh -lc './vendor/bin/pint --dirty || true'"
+          }
+        ]
+      }
+    ]
+  }
+}

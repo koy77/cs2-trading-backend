@@ -1,0 +1,60 @@
+# AI-ревью pull request'ов (опциональный помощник, по умолчанию выключен).
+#
+# ТРЕБУЕТ репозиторный секрет ANTHROPIC_API_KEY:
+#   Settings -> Secrets and variables -> Actions -> New repository secret.
+# Пока секрета нет (а также для PR из форков, где секреты не передаются),
+# шаг пропускается условием `if` — workflow остаётся зелёным и не блокирует PR.
+# Это осознанно «пример»: обязательные гейты качества живут в ci.yml
+# (pint / phpstan / tests), ai-review ничего не гейтит и падение не блокирует мердж.
+
+name: AI Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  ai-review:
+    name: Claude review
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read        # нужен для checkout
+      pull-requests: write  # постинг ревью-комментариев в PR
+
+    env:
+      # Секрет кладём в env job'а: `if` не умеет обращаться к secrets напрямую.
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Review diff with Claude
+        uses: anthropics/claude-code-action@v1
+        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        continue-on-error: true
+        with:
+          prompt: |
+            Ты ревьюишь pull request в проекте CS2 Trading Backend
+            (PHP 8.4, Laravel 13, MySQL 8.4, Redis 7, RabbitMQ 4).
+
+            Прочитай дифф именно этого PR (сравнение с base-веткой) и напиши ревью.
+            Не переписывай код целиком — только замечания.
+
+            Фокус (по убыванию приоритета):
+            1. Гонки и транзакции: границы транзакций, atomic claim
+               (`UPDATE ... WHERE status = ...` + affected rows), локи/мьютексы,
+               unique-индексы, параллельные запросы к одной сущности (покупка листинга, вебхуки).
+            2. Идемпотентность: повторные доставки и ретраи (вебхуки PSP, консьюмеры очередей,
+               `Idempotency-Key`), дедупликация, безопасность повторного применения.
+            3. Запросы к БД: N+1 (eager loading), отсутствующие индексы под WHERE/ORDER BY,
+               тяжёлые выборки без пагинации.
+            4. Безопасность: валидация входа (FormRequest), проверка HMAC-подписи и окна timestamp,
+               секреты в коде, mass assignment, raw SQL.
+            5. Тесты: закрыты ли новые инварианты (особенно concurrency и негативные сценарии),
+               осмысленность ассертов.
+
+            Формат: комментарии к конкретным файлам/строкам, каждое замечание —
+            severity (blocker / major / minor) и конкретное предложение по исправлению.
+            Отвечай по-русски. Если по пункту всё чисто — не выдумывай проблему.

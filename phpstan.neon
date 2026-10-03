@@ -1,0 +1,7 @@
+parameters:
+    level: 8
+    paths:
+        - app
+        - packages/steam-sdk/src
+    tmpDir: storage/framework/phpstan
+    treatPhpDocTypesAsCertain: false
