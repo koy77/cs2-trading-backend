@@ -1,7 +1,7 @@
 # AGENTS.md — краткая версия для любых агентов (Codex, OpenCode, Cursor, Hermes…)
 
 Полные правила и карта файлов: **[`CLAUDE.md`](CLAUDE.md)** (читай первым).
-Архитектура: `docs/architecture.md` · ТЗ: `spec.md` · журнал: `docs/progress.md`.
+Архитектура и фичи: `README.md` (+ `assets/` — диаграммы).
 
 TL;DR:
 
@@ -12,4 +12,4 @@ TL;DR:
 - Не ломать инварианты: один активный заказ на листинг, сходящийся ledger, идемпотентные вебхуки/синки.
 - Ключевые файлы: `app/Services/Trading/OrderService.php`, `app/Services/Psp/PspWebhookService.php`,
   `app/Services/Steam/SteamGateway.php`, `packages/steam-sdk/`, `resources/views/panel.blade.php`.
-- Фичи: план в `docs/plans/` → TDD (RED→GREEN) → гейты → ветка/PR по шаблону.
+- Фичи: согласованный план (в описании PR/issue) → TDD (RED→GREEN) → гейты → ветка/PR по шаблону.
