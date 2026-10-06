@@ -22,11 +22,11 @@
   <text x="308" y="220" font-size="9.5" fill="#67e8f9" text-anchor="middle">keyless</text>
   <text x="308" y="248" font-size="9.5" fill="#67e8f9" text-anchor="middle">HTTPS</text>
 
-  <line x1="692" y1="206" x2="754" y2="206" stroke="#fb7185" stroke-width="1.5" marker-end="url(#m-rose)"/>
+  <line x1="692" y1="206" x2="754" y2="206" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#m-rose)"><animate attributeName="stroke-dashoffset" from="0" to="-11" dur="0.9s" repeatCount="indefinite"/></line>
   <text x="723" y="196" font-size="9.5" fill="#fda4af" text-anchor="middle">charge</text>
   <text x="723" y="222" font-size="9" fill="#9f5f6f" text-anchor="middle">s2s</text>
 
-  <line x1="754" y1="330" x2="694" y2="330" stroke="#fb7185" stroke-width="1.5" marker-end="url(#m-rose)"/>
+  <line x1="754" y1="330" x2="694" y2="330" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#m-rose)"><animate attributeName="stroke-dashoffset" from="0" to="-11" dur="0.9s" repeatCount="indefinite"/></line>
   <text x="723" y="320" font-size="9.5" fill="#fda4af" text-anchor="middle">webhook</text>
   <text x="723" y="348" font-size="9" fill="#9f5f6f" text-anchor="middle">HMAC</text>
 
@@ -36,7 +36,7 @@
   <line x1="401" y1="450" x2="401" y2="463" stroke="#334155" stroke-width="1.5" marker-end="url(#m-slate)"/>
   <line x1="651" y1="450" x2="651" y2="463" stroke="#334155" stroke-width="1.5" marker-end="url(#m-slate)"/>
   <text x="401" y="444" font-size="9.5" fill="#64748b" text-anchor="middle">reads · writes · jobs</text>
-  <line x1="766" y1="506" x2="782" y2="506" stroke="#fb923c" stroke-width="1.5" marker-end="url(#m-orange)"/>
+  <line x1="766" y1="506" x2="782" y2="506" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#m-orange)"><animate attributeName="stroke-dashoffset" from="0" to="-8" dur="0.6s" repeatCount="indefinite"/></line>
 
   <!-- ===== STEAM card ===== -->
   <rect x="36" y="100" width="252" height="330" rx="10" fill="#0f172a"/>

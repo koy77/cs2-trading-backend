@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="590" viewBox="0 0 1060 590" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" role="img" aria-label="Deal lifecycle: buyer pays into escrow, fake trade offer, accepted settles to seller, declined or expired refunds the buyer, all through the double-entry ledger">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#12203a" stroke-width="1"/>
+    </pattern>
+    <marker id="m-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#22d3ee"/></marker>
+    <marker id="m-emerald" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#34d399"/></marker>
+    <marker id="m-rose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fb7185"/></marker>
+  </defs>
+
+  <rect width="1060" height="590" fill="#020617"/>
+  <rect width="1060" height="590" fill="url(#grid)"/>
+
+  <text x="36" y="52" font-size="24" font-weight="700" fill="#e2e8f0">Deal lifecycle — escrow holds the money</text>
+  <text x="36" y="78" font-size="12.5" fill="#94a3b8">buy → escrow → trade offer → accepted ⇒ settle · declined / expired ⇒ refund — every movement hits the double-entry ledger</text>
+
+  <!-- main chain arrows -->
+  <line x1="236" y1="205" x2="284" y2="205" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#m-cyan)"><animate attributeName="stroke-dashoffset" from="0" to="-11" dur="0.9s" repeatCount="indefinite"/></line>
+  <line x1="486" y1="205" x2="534" y2="205" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#m-cyan)"><animate attributeName="stroke-dashoffset" from="0" to="-11" dur="0.9s" repeatCount="indefinite"/></line>
+
+  <!-- branch arrows -->
+  <path d="M 736 192 L 760 192 L 760 160 L 782 160" fill="none" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m-emerald)"><animate attributeName="stroke-dashoffset" from="0" to="-9" dur="0.8s" repeatCount="indefinite"/></path>
+  <path d="M 736 218 L 760 218 L 760 330 L 782 330" fill="none" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#m-rose)"/>
+
+  <!-- N1 listing -->
+  <rect x="36" y="150" width="200" height="110" rx="8" fill="#0f172a"/>
+  <rect x="36" y="150" width="200" height="110" rx="8" fill="rgba(8,51,68,0.40)" stroke="#22d3ee" stroke-width="1.5"/>
+  <circle cx="54" cy="173" r="4" fill="#22d3ee"/>
+  <text x="66" y="177" font-size="12.5" font-weight="700" fill="#67e8f9">Listing active</text>
+  <text x="48" y="201" font-size="10" fill="#94a3b8">seller's skin · fixed price</text>
+  <text x="48" y="217" font-size="10" fill="#94a3b8">many buyers may race</text>
+  <text x="48" y="233" font-size="10" fill="#94a3b8">one active order — unique</text>
+
+  <!-- N2 order + escrow -->
+  <rect x="286" y="150" width="200" height="110" rx="8" fill="#0f172a"/>
+  <rect x="286" y="150" width="200" height="110" rx="8" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="304" cy="173" r="4" fill="#34d399"/>
+  <text x="316" y="177" font-size="12.5" font-weight="700" fill="#6ee7b7">Order + escrow</text>
+  <text x="298" y="201" font-size="10" fill="#94a3b8">funds: buyer − price</text>
+  <text x="298" y="217" font-size="10" fill="#94a3b8">platform:escrow + price</text>
+  <text x="298" y="233" font-size="10" fill="#94a3b8">one DB transaction</text>
+
+  <!-- N3 trade offer -->
+  <rect x="536" y="150" width="200" height="110" rx="8" fill="#0f172a"/>
+  <rect x="536" y="150" width="200" height="110" rx="8" fill="rgba(251,146,60,0.25)" stroke="#fb923c" stroke-width="1.5"/>
+  <circle cx="554" cy="173" r="4" fill="#fb923c"/>
+  <text x="566" y="177" font-size="12.5" font-weight="700" fill="#fdba74">Trade offer</text>
+  <text x="548" y="201" font-size="10" fill="#94a3b8">provider: FakeTradeProvider</text>
+  <text x="548" y="217" font-size="10" fill="#94a3b8">created → sent</text>
+  <text x="548" y="233" font-size="10" fill="#94a3b8">polled via trades.poll</text>
+
+  <!-- N4a accepted -->
+  <rect x="786" y="110" width="238" height="100" rx="8" fill="#0f172a"/>
+  <rect x="786" y="110" width="238" height="100" rx="8" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="804" cy="133" r="4" fill="#34d399"/>
+  <text x="816" y="137" font-size="12.5" font-weight="700" fill="#6ee7b7">Accepted → settle</text>
+  <text x="798" y="161" font-size="10" fill="#94a3b8">escrow − price</text>
+  <text x="798" y="177" font-size="10" fill="#94a3b8">seller + (price − fee)</text>
+  <text x="798" y="193" font-size="10" fill="#94a3b8">fee → platform (A/B)</text>
+
+  <!-- N4b declined -->
+  <rect x="786" y="280" width="238" height="100" rx="8" fill="#0f172a"/>
+  <rect x="786" y="280" width="238" height="100" rx="8" fill="rgba(136,19,55,0.40)" stroke="#fb7185" stroke-width="1.5"/>
+  <circle cx="804" cy="303" r="4" fill="#fb7185"/>
+  <text x="816" y="307" font-size="12.5" font-weight="700" fill="#fda4af">Declined / expired</text>
+  <text x="798" y="331" font-size="10" fill="#94a3b8">escrow − price</text>
+  <text x="798" y="347" font-size="10" fill="#94a3b8">buyer + price (full)</text>
+  <text x="798" y="363" font-size="10" fill="#94a3b8">no fee taken</text>
+
+  <!-- ledger band -->
+  <rect x="36" y="420" width="988" height="104" rx="10" fill="#0f172a" stroke="#1e293b"/>
+  <circle cx="54" cy="443" r="4" fill="#a78bfa"/>
+  <text x="66" y="447" font-size="12.5" font-weight="700" fill="#c4b5fd">Double-entry ledger — every step sums to zero</text>
+  <text x="1008" y="447" font-size="10" fill="#64748b" text-anchor="end">check: make ledger-check</text>
+
+  <text x="64" y="472" font-size="10" fill="#94a3b8">buy — user −price → escrow +price ✓</text>
+  <text x="64" y="490" font-size="9.5" fill="#64748b">same transaction as the atomic claim</text>
+
+  <text x="392" y="472" font-size="10" fill="#94a3b8">settle: escrow −price → seller +(price−fee)</text>
+  <text x="392" y="490" font-size="9.5" fill="#64748b">fee goes to platform (A/B variant)</text>
+
+  <text x="716" y="472" font-size="10" fill="#94a3b8">refund: escrow −price → user +price ✓</text>
+  <text x="716" y="490" font-size="9.5" fill="#64748b">automatic on decline / expiry</text>
+
+  <!-- chips -->
+  <rect x="36" y="540" width="330" height="32" rx="16" fill="#0b1220" stroke="#34d399"/>
+  <text x="201" y="560" font-size="10.5" fill="#6ee7b7" text-anchor="middle">escrow claim + ledger — one DB transaction</text>
+  <rect x="386" y="540" width="290" height="32" rx="16" fill="#0b1220" stroke="#fb7185"/>
+  <text x="531" y="560" font-size="10.5" fill="#fda4af" text-anchor="middle">refund is automatic (decline / expiry)</text>
+  <rect x="696" y="540" width="328" height="32" rx="16" fill="#0b1220" stroke="#a78bfa"/>
+  <text x="860" y="560" font-size="10.5" fill="#c4b5fd" text-anchor="middle">fee A/B split — make report</text>
+</svg>

@@ -55,7 +55,7 @@
 
   <rect x="390" y="216" width="276" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
   <text x="402" y="239" font-size="12" font-weight="600" fill="#e2e8f0">Shared throttle gate</text>
-  <text x="402" y="257" font-size="10" fill="#94a3b8">Redis ~1 rps across web + workers</text>
+  <text x="402" y="257" font-size="10" fill="#94a3b8">Redis gate · ~1 rps (web + workers)</text>
 
   <rect x="390" y="288" width="276" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
   <text x="402" y="311" font-size="12" font-weight="600" fill="#e2e8f0">Retries + backoff</text>
@@ -88,10 +88,10 @@
   <!-- ===== live OpenID flow ===== -->
   <text x="36" y="516" font-size="12.5" font-weight="700" fill="#34d399">LIVE OPENID FLOW — the “Sign in through Steam” button</text>
 
-  <line x1="221" y1="560" x2="234" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
-  <line x1="422" y1="560" x2="435" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
-  <line x1="623" y1="560" x2="636" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
-  <line x1="824" y1="560" x2="837" y2="560" stroke="#34d399" stroke-width="1.5" marker-end="url(#m-emerald)"/>
+  <line x1="221" y1="560" x2="234" y2="560" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-emerald)"><animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.7s" repeatCount="indefinite"/></line>
+  <line x1="422" y1="560" x2="435" y2="560" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-emerald)"><animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.7s" repeatCount="indefinite"/></line>
+  <line x1="623" y1="560" x2="636" y2="560" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-emerald)"><animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.7s" repeatCount="indefinite"/></line>
+  <line x1="824" y1="560" x2="837" y2="560" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m-emerald)"><animate attributeName="stroke-dashoffset" from="0" to="-7" dur="0.7s" repeatCount="indefinite"/></line>
 
   <rect x="36" y="528" width="184" height="64" rx="6" fill="#0b1220" stroke="#1e293b"/>
   <text x="48" y="546" font-size="10" fill="#64748b">1</text>

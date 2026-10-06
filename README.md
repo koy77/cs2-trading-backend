@@ -1,140 +1,155 @@
-# CS2 Trading Backend — technical demo
+# CS2 Trading Backend — техническое демо
 
-Backend demo of a **CS2 skin trading platform** on **Laravel 13**: Steam sign-in and inventory sync
-**without any Steam API keys**, marketplace orders that stay correct under **real concurrency**,
-**HMAC-signed PSP webhooks with idempotency**, **RabbitMQ** queues, MySQL / Redis — everything in Docker.
+[![CI](https://github.com/koy77/cs2-trading-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/koy77/cs2-trading-backend/actions/workflows/ci.yml)
+![PHP](https://img.shields.io/badge/PHP-8.4-777bb4)
+![Laravel](https://img.shields.io/badge/Laravel-13-ff2d20)
+![Docker](https://img.shields.io/badge/Docker-compose-2496ed)
 
-The point of this repo: every requirement of the target vacancy is backed by a **runnable artifact**,
-not by words. Clone → `make demo` → click through the panel (≈10 minutes).
+**🇷🇺 Русский** · [🇬🇧 English](README.en.md)
 
-> 🇷🇺 Полное ТЗ и сценарий показа на интервью: [`spec.md`](spec.md), [`docs/demo-script.md`](docs/demo-script.md).
-> Agent-facing docs: [`CLAUDE.md`](CLAUDE.md), [`AGENTS.md`](AGENTS.md), [`docs/architecture.md`](docs/architecture.md).
+Backend-демо **торговой площадки CS2-скинов** на **Laravel 13**: вход через Steam и синхронизация
+инвентаря **без единого API-ключа**, покупки, которые не ломаются под **реальной конкуренцией**,
+**HMAC-вебхуки** платёжного провайдера с идемпотентностью, **RabbitMQ**, MySQL / Redis — всё в Docker.
+
+Клонировать → `make demo` → кликать панель. Каждый пункт ниже — работающий артефакт, а не обещание.
+
+![Архитектура демо: Steam, Laravel-приложение, mock-PSP, MySQL / Redis / RabbitMQ](assets/overview.svg)
 
 ---
 
-## What's inside (and where it bites)
+## Что внутри (и где подводные камни)
 
-| Area | Artifact |
+| Область | Артефакт |
 |---|---|
-| **Keyless Steam** | Internal package [`koy77/steam-sdk`](packages/steam-sdk): Steam OpenID sign-in, public inventory feed, Steam Market prices, public Web API. `real ⇄ fixture` provider switch, shared Redis throttle gate, retries. No API key anywhere. |
-| **Races** | `OrderService::buy()` — atomic claim (`UPDATE ... WHERE status='active'`, affected-rows check) + unique virtual-column index on active orders + ledger inside one transaction. `make race` fires N parallel processes: **exactly one winner**; `tests/Feature/RaceTest.php` proves it. |
-| **Payments / webhooks** | `mock-psp` service emulates a PSP (modes `ok / timeout / http_500`). Inbound callbacks: HMAC-SHA256 over raw body + timestamp window + replay dedup → credit exactly once. Top-ups carry `Idempotency-Key` (replayed responses). Outbound postbacks: HMAC-signed, retried via queue. Double-entry ledger: `make ledger-check`. |
-| **Queues** | RabbitMQ, 5 queues (`inventory.sync`, `prices.refresh`, `orders.fulfill`, `trades.poll`, `webhooks.out`), backoff retries, `failed_jobs` → `queue:retry all`. Poison-payload demo button. |
-| **MySQL / Redis** | Indexed marketplace schema, `EXPLAIN` walkthrough (`make explain`), 100k-row perf lab (`make perf`: seed → measure → index → measure), Redis price cache with throttle, `Cache::lock`-style coordination. |
-| **Quality gates** | Pint, **PHPStan (Larastan) level 8 — zero errors**, PHPCS (PSR-12), PHPUnit — 28 tests incl. concurrency + idempotency. All gates run in GitHub Actions. |
-| **AI workflow** | `CLAUDE.md` / `AGENTS.md`, slash-commands (`.claude/commands/`), PostToolUse hook (auto-Pint), `.mcp.json` (read-only MySQL + fetch MCPs), optional AI PR review workflow. See [`docs/ai-workflow.md`](docs/ai-workflow.md). |
-| **Ops** | FrankenPHP (classic mode, no NGINX/PHP-FPM — PHP edits apply instantly), Prometheus `/metrics` endpoint, Grafana dashboard (compose profile `monitoring`), light load smoke (`make load-light`). |
+| **Steam без ключей** | Внутренний пакет [`koy77/steam-sdk`](packages/steam-sdk): Steam OpenID-вход, публичный фид инвентаря, цены Steam Market, публичный Web API. Переключатель провайдера `real ⇄ fixture`, общий троттлинг-гейт в Redis, ретраи. Ни одного API-ключа. |
+| **Гонки** | `OrderService::buy()` — атомарный захват (`UPDATE ... WHERE status='active'`, проверка affected rows) + уникальный индекс по виртуальной колонке на активные заказы + ledger в одной транзакции. `make race` запускает N параллельных процессов: **ровно один победитель**; `tests/Feature/RaceTest.php` это доказывает. |
+| **Платежи / вебхуки** | Сервис `mock-psp` эмулирует PSP (режимы `ok / timeout / http_500`). Входящие колбэки: HMAC-SHA256 по сырому body + окно timestamp + дедуп реплеев → зачисление ровно один раз. У пополнений — `Idempotency-Key` (ответы переигрываются). Исходящие postback'и: подписаны HMAC, ретраятся через очередь. Двойная запись: `make ledger-check`. |
+| **Очереди** | RabbitMQ, 5 очередей (`inventory.sync`, `prices.refresh`, `orders.fulfill`, `trades.poll`, `webhooks.out`), ретраи с backoff, `failed_jobs` → `make queue-replay`. Кнопка «отравленного» сообщения в панели. |
+| **MySQL / Redis** | Индексированная схема маркетплейса, разбор `EXPLAIN` (`make explain`), перф-лаборатория на 100k строк (`make perf`: сид → замер → индекс → замер), кэш цен в Redis с троттлингом. |
+| **Гейты качества** | Pint, **PHPStan (Larastan) level 8 — ноль ошибок**, PHPCS (PSR-12), PHPUnit — 28 тестов, включая конкурентность и идемпотентность. Все гейты крутятся в GitHub Actions. |
+| **AI-воркфлоу** | `CLAUDE.md` / `AGENTS.md`, slash-команды (`.claude/commands/`), PostToolUse-хук (авто-Pint), `.mcp.json` (read-only MySQL + fetch MCP), опциональный AI-ревью PR (`.github/workflows/ai-review.yml`). |
+| **Ops** | FrankenPHP (classic mode, без NGINX/PHP-FPM — правки PHP применяются мгновенно), эндпоинт Prometheus `/metrics`, дашборд Grafana (профиль `monitoring`), лёгкий load-smoke (`make load-light`). |
 
 ---
 
-## Quickstart
+## Быстрый старт
 
-Requirements: Docker + Docker Compose (that's all — PHP/MySQL/Redis/RabbitMQ live in containers).
+Нужны только Docker + Docker Compose (PHP / MySQL / Redis / RabbitMQ живут в контейнерах).
 
 ```bash
-make demo        # .env + APP_KEY + build + up + migrate:fresh --seed + open panel
+make demo        # .env + APP_KEY + build + up + migrate:fresh --seed + открыть панель
 ```
 
-Panel: **http://localhost:18090** · RabbitMQ UI: http://localhost:25674 (cs2/secret) · Grafana: `make monitoring-up` → http://localhost:13001
+Панель: **http://localhost:18090** · RabbitMQ UI: http://localhost:25674 (cs2/secret) · Grafana: `make monitoring-up` → http://localhost:13001
 
-Demo logins (no Steam account needed): **kyle** (82-item public inventory fixture), **outso**, **buyer** ($100 demo balance).
-Live Steam: "Войти через Steam" button → real Steam OpenID flow (keyless).
+Демо-логины (Steam-аккаунт не нужен): **kyle** (публичный инвентарь из фикстуры, 82 предмета), **outso**, **buyer** ($100 демо-баланса).
+Живой Steam: кнопка «Войти через Steam» → настоящий Steam OpenID (без ключей).
 
-### Cheat sheet
+### Шпаргалка
 
 ```bash
-make help            # all commands
-make up / down       # start/stop the stack
-make fresh           # migrate:fresh + demo seed (idempotent)
-make test            # PHPUnit (uses cs2_test DB)
+make help            # все команды
+make up / down       # поднять / остановить стек
+make fresh           # migrate:fresh + демо-сид (идемпотентно)
+make test            # PHPUnit (база cs2_test)
 make lint / stan / phpcs   # Pint / PHPStan L8 / PSR-12
-make race            # ATTEMPTS=30 parallel buys → exactly one winner
-make demo-webhook MODE=dup   # same webhook ×10 → credited once (valid|dup|bad_sig|stale)
-make perf            # 100k rows: EXPLAIN before/after index
-make explain         # hot-query EXPLAIN on the fresh schema
-make load-light      # p95/rps smoke against /api/state
-make report          # analytics + A/B commission split
-make monitoring-up   # Prometheus + Grafana profile
+make race            # ATTEMPTS=30 параллельных покупок → ровно один победитель
+make demo-webhook MODE=dup   # один и тот же вебхук ×10 → зачислен один раз (valid|dup|bad_sig|stale)
+make queue-fail / queue-replay / queue-flush  # «яд»: падение → failed_jobs → replay
+make perf            # 100k строк: EXPLAIN до/после индекса
+make explain         # EXPLAIN горячих запросов на свежей схеме
+make load-light      # p95/rps смоук по /api/state
+make report          # аналитика + A/B-комиссия
+make ledger-check    # сходимость двойной записи
+make monitoring-up   # профиль Prometheus + Grafana
 ```
 
 ---
 
-## Keyless Steam — what is actually used
+## Steam без API-ключей
 
-| Endpoint | Purpose | Key needed |
+![Steam без API-ключей: что вызывается напрямую, что оборачивает SDK, что невозможно без сессии и потому замокано](assets/steam-keyless.svg)
+
+| Эндпоинт | Назначение | Нужен ключ |
 |---|---|---|
-| `steamcommunity.com/openid/login` | "Sign in through Steam" → SteamID64 | no (official) |
-| `steamcommunity.com/inventory/{steamid}/730/2` | public CS2 inventory (assets, classids, names, tradable flags) | no |
-| `steamcommunity.com/market/priceoverview?appid=730&...` | lowest/median price + volume per item | no |
-| `steamcommunity.com/id/{vanity}/?xml=1` | vanity → SteamID64, persona | no |
-| `api.steampowered.com` public methods (e.g. `GetNumberOfCurrentPlayers`, `GetNewsForApp`) | stats/news vitrine | no |
+| `steamcommunity.com/openid/login` | «Войти через Steam» → SteamID64 | нет (официальный) |
+| `steamcommunity.com/inventory/{steamid}/730/2` | публичный инвентарь CS2 (assets, classid, имена, tradable-флаги) | нет |
+| `steamcommunity.com/market/priceoverview?appid=730&...` | минимальная/медианная цена + объём по предмету | нет |
+| `steamcommunity.com/id/{vanity}/?xml=1` | vanity → SteamID64, persona | нет |
+| публичные методы `api.steampowered.com` (например, `GetNumberOfCurrentPlayers`, `GetNewsForApp`) | витрина статистики/новостей | нет |
 
-Deliberate boundaries (honest by design):
+Границы — честные по дизайну:
 
-- `GetPlayerSummaries`, `ResolveVanityURL`, `IEconItems_730` → **require a Web API key** (and are not needed here).
-- **Creating/accepting Steam trade offers has no official public API at all** (needs account session + SteamGuard).
-  That's why the trade lifecycle runs through a `TradeProvider` interface with a `FakeTradeProvider`
-  (`created → sent → accepted/declined/expired`) — and why CI never needs Steam credentials.
-- Steam community endpoints are rate-limited / picky about cloud IPs — hence throttling, fixtures,
-  and the `real | fixture` switch (fixture snapshots of **real public profiles** are committed).
-
----
-
-## Demo scenarios (interview, ~10 min)
-
-Full script with button-by-button flow: [`docs/demo-script.md`](docs/demo-script.md).
-
-1. **Steam & inventory** — login, live/fixture sync through `inventory.sync` queue; market price for an item.
-2. **Race** — `⚡ Гонка ×30` over one listing → exactly one order, `409` for the rest; ledger consistent.
-3. **Webhooks** — `dup ×10`: same `event_id` ten times → balance changes once; `bad_sig`/`stale` → 401.
-4. **Queues** — poison payload ×5 → retries → `failed_jobs` → replay; depth visible in RabbitMQ UI.
-5. **Trade lifecycle** — buyer pays → offer (fake) → seller accepts/declines/expires → escrow settles or refunds; Grafana shows orders/GMV/queues.
+- `GetPlayerSummaries`, `ResolveVanityURL`, `IEconItems_730` → **требуют Web API key** (и здесь не нужны).
+- **Создание/принятие трейд-офферов вообще не имеет публичного API** (нужна сессия аккаунта + SteamGuard).
+  Поэтому жизненный цикл сделки идёт через интерфейс `TradeProvider` с `FakeTradeProvider`
+  (`created → sent → accepted/declined/expired`) — и поэтому CI никогда не требует Steam-креденшелов.
+- Community-эндпоинты Steam рейт-лимитятся и капризны к облачным IP — отсюда троттлинг, фикстуры
+  и переключатель `real | fixture` (в репо закоммичены снапшоты реальных публичных профилей).
 
 ---
 
-## Architecture at a glance
+## Надёжность: гонки, вебхуки, ledger
+
+![Инварианты под нагрузкой: победитель гонки, реплеи вебхуков, двойная запись](assets/safety.svg)
+
+- **Гонки.** 30 параллельных покупок одного листинга → ровно один заказ, остальные получают `409`.
+  Атомарный claim + уникальный индекс-подстраховка + запись в ledger в одной транзакции.
+- **Вебхуки.** HMAC по сырому телу, окно timestamp, дедуп по `(provider, event_id)`: один и тот же
+  колбэк ×10 → одно зачисление; `bad_sig` / `stale` → `401`. Исходящие postback'и — с ретраями через очередь.
+- **Деньги.** Двойная запись: каждая группа проводок сходится в ноль (`make ledger-check`).
+- **Скорость.** 100k строк: 25.3 ms → 0.4 ms (×63) после индекса (`make perf`).
+
+## Очереди и ретраи
+
+![5 очередей RabbitMQ: web и cron отправляют джобы, один worker с backoff-ретраями, провалы — в failed_jobs и replay](assets/queues.svg)
+
+- Пять очередей, включая идемпотентный `inventory.sync`, кэширующий `prices.refresh` и подписанные
+  исходящие `webhooks.out`; воркер один — конкурентность отлаживается честно.
+- Упавшая после ретраев джоба попадает в `failed_jobs`; `make queue-replay` возвращает её в работу —
+  демо «отравленного» сообщения: первая доставка падает, повторная проходит.
+
+## Жизненный цикл сделки
+
+![Покупатель платит → escrow → трейд-оффер → settle или возврат; двойная запись на каждом шаге](assets/deal.svg)
+
+- Покупатель платит → деньги уходят в **escrow**; трейд-оффер создаётся через `TradeProvider`
+  (`FakeTradeProvider`): `created → sent → accepted / declined / expired`.
+- `accepted` → **settle**: продавец получает цену минус комиссию, комиссия уходит платформе.
+- `declined` / `expired` → **возврат**: escrow возвращается покупателю полностью.
+- Комиссия — A/B через Pennant (`make report` агрегирует сплиты).
+
+---
+
+## Сценарии демо (~10 минут)
+
+![Маршрут демо: пять сцен от синка Steam до зелёных гейтов](assets/demo-route.svg)
+
+1. **Steam и инвентарь** — вход, live/fixture-синк через очередь `inventory.sync`; рыночная цена предмета.
+2. **Гонка** — `⚡ Гонка ×30` по одному листингу → ровно один заказ, остальным `409`; ledger сходится.
+3. **Вебхуки** — `dup ×10`: один `event_id` десять раз → баланс меняется один раз; `bad_sig` / `stale` → 401.
+4. **Очереди** — «отравленный» payload ×5 → ретраи → `failed_jobs` → replay; глубина видна в RabbitMQ UI.
+5. **Сделка** — покупатель платит → оффер (fake) → продавец принимает/отклоняет/истекает → escrow рассчитывается или возвращается; Grafana показывает заказы/GMV/очереди.
+
+---
+
+## Стек и структура
+
+**Стек:** PHP 8.4 · Laravel 13 · FrankenPHP (classic) · MySQL 8.4 · Redis 7 · RabbitMQ 4 · Docker Compose · PHPUnit / Pint / PHPStan L8 / PHPCS · Prometheus + Grafana.
 
 ```
-Steam (keyless)          Browser panel (/, blade, no build step)
-  OpenID / community ──► Laravel 13 (FrankenPHP, classic) ──► RabbitMQ worker ×1 (+scheduler)
-  real | fixture            │  Identity · Inventory · Market · Trading · Payments
-                            ▼
-                    MySQL 8.4 (orders, ledger, inventory)   Redis 7 (cache, throttle, locks)
-                            │
-                    mock-PSP ◄──► HMAC webhooks / postbacks        Prometheus ◄─ /metrics ◄─ Grafana
+app/                 Laravel-код: сервисы, джобы, контроллеры панели и API
+packages/steam-sdk/  внутренний пакет: Steam OpenID / инвентарь / цены (keyless)
+services/mock-psp/   эмулятор платёжного провайдера (ok / timeout / http_500)
+database/            миграции + демо-сидеры
+tests/               PHPUnit: гонки, вебхуки, ledger, SDK
+assets/              SVG-диаграммы этого README
+docker/ monitoring/  FrankenPHP-образ, Prometheus / Grafana
+Makefile             весь жизненный цикл: make help
 ```
 
-Details: [`docs/architecture.md`](docs/architecture.md).
+Для работы с AI-агентами в репо лежат `CLAUDE.md` / `AGENTS.md` / `.claude/` / `.mcp.json`.
 
----
+## Лицензия
 
-## Vacancy → artifact map
-
-| Vacancy requirement | Where to look |
-|---|---|
-| Laravel: events/listeners, queues, DI, service providers, FormRequest | `AppServiceProvider`, `*ServiceProvider`, `app/Events·Listeners·Jobs`, `app/Http/Requests` |
-| SOLID in practice | `TradeProvider` / `SteamGateway` interfaces, thin controllers, services + DI everywhere |
-| MySQL indexes, EXPLAIN, heavy queries | `make explain`, `make perf`, migrations with composite indexes |
-| Redis | market price cache, shared throttle gate, queue of demo actions |
-| RabbitMQ + async | 5 queues, retries/backoff, failed_jobs replay (`docs/architecture.md` §queues) |
-| Race conditions, locks, atomics | `OrderService::buy()`, `RaceTest`, `make race`, unique virtual index |
-| REST + payments + HMAC + webhook idempotency | `PspWebhookService`, `PspSigner`, `IdempotencyKey` middleware, `WebhookTest` |
-| Git / PR flow | 6+ focused commits, `.github/PULL_REQUEST_TEMPLATE.md` |
-| Docker for local dev | `docker-compose.yml`, `Dockerfile`, `Makefile` (only `make` needed) |
-| AI agents as daily tool | `CLAUDE.md`, `.claude/*`, `.mcp.json`, AI review workflow, `docs/ai-workflow.md` |
-| PHPStan / PHPCS / tests | all gates green in `ci.yml` |
-| Ubuntu / no NGINX | FrankenPHP classic mode (Caddy + PHP in one container) |
-| Grafana / monitoring | `monitoring/` + compose profile |
-| Antifraud / analytics / A/B | events table + `make report`, Pennant fee A/B (`FeeVariant`) |
-
-## Docs
-
-- [`spec.md`](spec.md) — full RU spec (scenarios, modules, interview Q&A appendix)
-- [`docs/architecture.md`](docs/architecture.md) — module map, flows, invariants
-- [`docs/demo-script.md`](docs/demo-script.md) — 10-minute live demo script (RU)
-- [`docs/ai-workflow.md`](docs/ai-workflow.md) — how AI agents are wired into this repo (RU)
-- [`docs/progress.md`](docs/progress.md) — build journal / current state
-
-## License
-
-MIT. Steam and CS2 are trademarks of Valve Corporation; this is a non-commercial technical demo using publicly available data only.
+MIT. Steam и CS2 — товарные знаки Valve Corporation; это некоммерческое техническое демо, использующее только публично доступные данные.

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="610" viewBox="0 0 1060 610" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" role="img" aria-label="RabbitMQ async backbone: web and cron dispatch jobs into 5 queues, one worker consumes with backoff retries, failures land in failed_jobs and replay">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#12203a" stroke-width="1"/>
+    </pattern>
+    <marker id="m-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#94a3b8"/></marker>
+    <marker id="m-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#fb923c"/></marker>
+  </defs>
+
+  <rect width="1060" height="610" fill="#020617"/>
+  <rect width="1060" height="610" fill="url(#grid)"/>
+
+  <text x="36" y="52" font-size="24" font-weight="700" fill="#e2e8f0">Async backbone — 5 queues, retries, replay</text>
+  <text x="36" y="78" font-size="12.5" fill="#94a3b8">web and cron dispatch jobs; one worker consumes all queues with backoff retries; failures land in failed_jobs and replay cleanly</text>
+
+  <!-- dispatch arrows -->
+  <line x1="246" y1="164" x2="294" y2="164" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <text x="270" y="154" font-size="9.5" fill="#64748b" text-anchor="middle">dispatch</text>
+  <line x1="246" y1="260" x2="294" y2="260" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+  <text x="270" y="250" font-size="9.5" fill="#64748b" text-anchor="middle">periodic</text>
+
+  <!-- panel / scheduler cards -->
+  <rect x="36" y="120" width="210" height="88" rx="8" fill="#0f172a"/>
+  <rect x="36" y="120" width="210" height="88" rx="8" fill="rgba(8,51,68,0.40)" stroke="#22d3ee" stroke-width="1.5"/>
+  <circle cx="54" cy="143" r="4" fill="#22d3ee"/>
+  <text x="66" y="147" font-size="13" font-weight="700" fill="#67e8f9">Panel / REST API</text>
+  <text x="48" y="172" font-size="10" fill="#94a3b8">web dispatch: Event → Job</text>
+  <text x="48" y="188" font-size="10" fill="#94a3b8">demo actions: race · webhooks</text>
+
+  <rect x="36" y="216" width="210" height="88" rx="8" fill="#0f172a"/>
+  <rect x="36" y="216" width="210" height="88" rx="8" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="54" cy="239" r="4" fill="#34d399"/>
+  <text x="66" y="243" font-size="13" font-weight="700" fill="#6ee7b7">Scheduler (cron)</text>
+  <text x="48" y="268" font-size="10" fill="#94a3b8">periodic polls → queues</text>
+  <text x="48" y="284" font-size="10" fill="#94a3b8">prices.refresh · trades.poll</text>
+
+  <!-- RabbitMQ panel -->
+  <rect x="296" y="120" width="460" height="372" rx="10" fill="#0f172a"/>
+  <rect x="296" y="120" width="460" height="372" rx="10" fill="rgba(251,146,60,0.25)" stroke="#fb923c" stroke-width="1.5"/>
+  <circle cx="314" cy="143" r="4" fill="#fb923c"/>
+  <text x="326" y="147" font-size="13" font-weight="700" fill="#fdba74">RabbitMQ 4 — five queues</text>
+
+  <rect x="310" y="162" width="432" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="322" y="184" font-size="11.5" font-weight="700" fill="#e2e8f0">inventory.sync</text>
+  <text x="322" y="203" font-size="10" fill="#94a3b8">Steam inventory → idempotent upsert (assets, tradability)</text>
+
+  <rect x="310" y="226" width="432" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="322" y="248" font-size="11.5" font-weight="700" fill="#e2e8f0">prices.refresh</text>
+  <text x="322" y="267" font-size="10" fill="#94a3b8">market price snapshots → Redis cache (TTL 180 s)</text>
+
+  <rect x="310" y="290" width="432" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="322" y="312" font-size="11.5" font-weight="700" fill="#e2e8f0">orders.fulfill</text>
+  <text x="322" y="331" font-size="10" fill="#94a3b8">post-payment fulfilment: trade offer + ledger events</text>
+
+  <rect x="310" y="354" width="432" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="322" y="376" font-size="11.5" font-weight="700" fill="#e2e8f0">trades.poll</text>
+  <text x="322" y="395" font-size="10" fill="#94a3b8">trade-offer status from the provider (fake)</text>
+
+  <rect x="310" y="418" width="432" height="56" rx="6" fill="#0b1220" stroke="#1e293b"/>
+  <text x="322" y="440" font-size="11.5" font-weight="700" fill="#e2e8f0">webhooks.out</text>
+  <text x="322" y="459" font-size="10" fill="#94a3b8">HMAC-signed postbacks, delivery retried</text>
+
+  <!-- worker consumes -->
+  <line x1="756" y1="180" x2="785" y2="180" stroke="#94a3b8" stroke-width="2" marker-end="url(#m-slate)"/>
+
+  <!-- right column -->
+  <rect x="786" y="120" width="238" height="96" rx="8" fill="#0f172a"/>
+  <rect x="786" y="120" width="238" height="96" rx="8" fill="rgba(6,78,59,0.40)" stroke="#34d399" stroke-width="1.5"/>
+  <circle cx="804" cy="143" r="4" fill="#34d399"/>
+  <text x="816" y="147" font-size="13" font-weight="700" fill="#6ee7b7">worker — queue:work</text>
+  <text x="798" y="172" font-size="10" fill="#94a3b8">consumes all 5 queues</text>
+  <text x="798" y="188" font-size="10" fill="#94a3b8">retries with backoff</text>
+  <text x="798" y="204" font-size="10" fill="#94a3b8">failures → failed_jobs</text>
+
+  <line x1="905" y1="217" x2="905" y2="226" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+
+  <rect x="786" y="228" width="238" height="88" rx="8" fill="#0f172a"/>
+  <rect x="786" y="228" width="238" height="88" rx="8" fill="rgba(136,19,55,0.40)" stroke="#fb7185" stroke-width="1.5"/>
+  <circle cx="804" cy="251" r="4" fill="#fb7185"/>
+  <text x="816" y="255" font-size="13" font-weight="700" fill="#fda4af">failed_jobs (DB)</text>
+  <text x="798" y="278" font-size="10" fill="#94a3b8">payload + exception kept</text>
+  <text x="798" y="294" font-size="10" fill="#94a3b8">after retries exhausted</text>
+
+  <line x1="905" y1="317" x2="905" y2="326" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m-slate)"/>
+
+  <rect x="786" y="328" width="238" height="88" rx="8" fill="#0f172a"/>
+  <rect x="786" y="328" width="238" height="88" rx="8" fill="rgba(251,146,60,0.25)" stroke="#fb923c" stroke-width="1.5"/>
+  <circle cx="804" cy="351" r="4" fill="#fb923c"/>
+  <text x="816" y="355" font-size="13" font-weight="700" fill="#fdba74">queue:retry all</text>
+  <text x="798" y="378" font-size="10" fill="#94a3b8">replay after the fix</text>
+  <text x="798" y="394" font-size="10" fill="#94a3b8">poison demo: replay passes</text>
+
+  <!-- replay loop back into the broker -->
+  <path d="M 905 416 L 905 505 L 526 505 L 526 497" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#m-orange)"><animate attributeName="stroke-dashoffset" from="0" to="-11" dur="0.9s" repeatCount="indefinite"/></path>
+  <text x="716" y="519" font-size="9.5" fill="#64748b" text-anchor="middle">make queue-replay</text>
+
+  <!-- chips -->
+  <rect x="36" y="535" width="300" height="32" rx="16" fill="#0b1220" stroke="#fb923c"/>
+  <text x="186" y="555" font-size="10.5" fill="#fdba74" text-anchor="middle">retry → failed_jobs → queue:retry all</text>
+  <rect x="356" y="535" width="320" height="32" rx="16" fill="#0b1220" stroke="#34d399"/>
+  <text x="516" y="555" font-size="10.5" fill="#6ee7b7" text-anchor="middle">poison demo: 1st delivery fails, replay passes</text>
+  <rect x="696" y="535" width="328" height="32" rx="16" fill="#0b1220" stroke="#94a3b8"/>
+  <text x="860" y="555" font-size="10.5" fill="#cbd5e1" text-anchor="middle">queue depth &amp; messages — RabbitMQ UI (:25674)</text>
+</svg>
