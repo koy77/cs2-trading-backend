@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Listing;
 use App\Models\User;
+use App\Services\Money\LedgerService;
 use App\Support\EventLogger;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
@@ -35,6 +36,20 @@ class DemoRace extends Command
 
         if ($buyer === null) {
             $this->error("Покупатель '{$slug}' не найден");
+
+            return self::FAILURE;
+        }
+
+        $balance = app(LedgerService::class)->userBalance($buyer->id);
+
+        if ($balance < $listing->price_cents) {
+            $this->error(sprintf(
+                'У покупателя %s баланс %s — меньше цены листинга #%d (%s). Пополни баланс (кнопка «Пополнить $10» в панели) или сделай make fresh.',
+                $buyer->slug,
+                number_format($balance / 100, 2).' $',
+                $listing->id,
+                number_format($listing->price_cents / 100, 2).' $',
+            ));
 
             return self::FAILURE;
         }
@@ -76,7 +91,8 @@ class DemoRace extends Command
         $durationMs = (int) round((microtime(true) - $started) * 1000);
         $success = count(array_filter($codes, fn ($c) => $c === 0));
         $conflict = count(array_filter($codes, fn ($c) => $c === 1));
-        $other = $attempts - $success - $conflict;
+        $funds = count(array_filter($codes, fn ($c) => $c === 3));
+        $other = $attempts - $success - $conflict - $funds;
 
         $this->newLine();
         $this->table(
@@ -84,6 +100,7 @@ class DemoRace extends Command
             [
                 ['Победителей (успешная покупка)', $success],
                 ['Конфликтов (409: уже продано/зарезервировано)', $conflict],
+                ['Недостаточно средств (пополни баланс)', $funds],
                 ['Прочих (ошибка)', $other],
                 ['Длительность гонки', $durationMs.' ms'],
             ],
@@ -91,14 +108,19 @@ class DemoRace extends Command
 
         $ok = $success === 1;
 
-        $this->{$ok ? 'info' : 'error'}($ok
-            ? '✓ Инвариант «не продать дважды» удержан: ровно один заказ.'
-            : "✗ Ожидался ровно один победитель, получено {$success}. Разберись немедленно!");
+        if (! $ok && $success === 0 && $funds > 0) {
+            $this->error("✗ Победитель не определён: {$funds} попыток отбито недостатком средств у покупателя. Пополни баланс (кнопка «Пополнить $10» в панели) или сделай make fresh.");
+        } else {
+            $this->{$ok ? 'info' : 'error'}($ok
+                ? '✓ Инвариант «не продать дважды» удержан: ровно один заказ.'
+                : "✗ Ожидался ровно один победитель, получено {$success}. Разберись немедленно!");
+        }
 
         $events->log('demo.race', null, 'listing', $listing->id, [
             'attempts' => $attempts,
             'success' => $success,
             'conflict' => $conflict,
+            'funds' => $funds,
             'duration_ms' => $durationMs,
         ]);
 

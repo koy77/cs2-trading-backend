@@ -31,7 +31,8 @@ class DemoBuyDirect extends Command
         } catch (OrderConflictException $e) {
             return $this->emit(['ok' => false, 'reason' => 'conflict', 'message' => $e->getMessage()], 1);
         } catch (InsufficientFundsException $e) {
-            return $this->emit(['ok' => false, 'reason' => 'funds', 'message' => $e->getMessage()], 1);
+            // Код 3 — не хватило баланса: гонка отличает его от 409-конфликта (0 = успех, 1 = конфликт, 2 = прочая ошибка).
+            return $this->emit(['ok' => false, 'reason' => 'funds', 'message' => $e->getMessage()], 3);
         } catch (\Throwable $e) {
             return $this->emit(['ok' => false, 'reason' => 'error', 'message' => $e->getMessage()], 2);
         }
